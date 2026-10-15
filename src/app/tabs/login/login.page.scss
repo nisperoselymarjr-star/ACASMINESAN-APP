@@ -1,0 +1,298 @@
+.login-screen {
+	--background: #ffffff;
+}
+
+.login-content {
+	background: #ffffff;
+	box-sizing: border-box;
+	min-height: 100%;
+	margin-inline: auto;
+	max-width: 620px;
+	padding: 18px 17px 32px;
+	width: 100%;
+}
+
+.login-logo {
+	color: #666666;
+	font-size: 16px;
+	font-weight: 400;
+	height: 32px;
+	line-height: 32px;
+	margin: 0 auto 28px;
+	text-align: center;
+	width: 156px;
+}
+
+.login-form {
+	display: flex;
+	flex-direction: column;
+}
+
+.saved-accounts {
+	margin: 0 auto 24px;
+	max-width: 460px;
+}
+
+.saved-accounts h2 {
+	color: #666666;
+	font-size: 13px;
+	font-weight: 600;
+	margin: 0 0 8px;
+}
+
+.saved-accounts p {
+	color: #777777;
+	font-size: 12px;
+	margin: 0 0 8px;
+}
+
+.saved-account-list {
+	display: grid;
+	gap: 6px;
+}
+
+.saved-account-row {
+	align-items: stretch;
+	display: flex;
+	gap: 6px;
+	min-width: 0;
+}
+
+.saved-account-select,
+.saved-account-remove {
+	border: 0;
+	border-radius: 7px;
+	font: inherit;
+	min-height: 40px;
+}
+
+.saved-account-select {
+	background: #eeeeee;
+	color: #444444;
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+	padding: 0 12px;
+	text-align: left;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.saved-account-remove {
+	background: transparent;
+	color: #777777;
+	flex: 0 0 auto;
+	padding: 0 10px;
+}
+
+.login-field {
+	display: block;
+}
+
+.login-field span {
+	color: #b0b0b0;
+	display: block;
+	font-size: 12px;
+	margin: 0 0 4px 2px;
+}
+
+.login-field input {
+	background: #222222;
+	border: 0;
+	border-radius: 11px;
+	box-sizing: border-box;
+	color: #ffffff;
+	font: inherit;
+	height: 35px;
+	padding: 0 12px;
+	width: 100%;
+}
+
+.password-field {
+	margin-top: 23px;
+}
+
+.forgot-password {
+	align-self: flex-start;
+	background: transparent;
+	border: 0;
+	color: #a8a8a8;
+	font: inherit;
+	font-size: 12px;
+	margin-top: 5px;
+	padding: 0 2px;
+	text-align: left;
+}
+
+.login-error {
+	color: #b42318;
+	font-size: 13px;
+	margin: 10px 2px 0;
+}
+
+.continue-button {
+	background: #b8b8b8;
+	border: 0;
+	border-radius: 8px;
+	box-sizing: border-box;
+	color: #444444;
+	font: inherit;
+	font-size: 16px;
+	height: 48px;
+	margin-top: 12px;
+	max-width: 24rem;
+	padding: 12px 24px;
+	text-align: left;
+	width: 100%;
+}
+
+.forgot-password:focus-visible,
+.continue-button:focus-visible,
+.login-field input:focus-visible,
+.saved-account-select:focus-visible,
+.saved-account-remove:focus-visible {
+	outline: 2px solid #555555;
+	outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+	.login-content {
+		padding: 12px 12px 24px;
+	}
+}
+
+.login-screen {
+	--background: #17162e;
+	background: #17162e;
+	color: #eeecff;
+}
+
+.login-content {
+	background: linear-gradient(155deg, #211f3e, #1b1a35 72%);
+	border: 1px solid #393756;
+	border-radius: 22px;
+	box-shadow: 0 18px 48px #0d0c203d;
+	color: #eeecff;
+	margin-block: 32px;
+	padding: 30px;
+}
+
+.login-logo {
+	color: #f4f2ff;
+	font-size: 24px;
+	font-weight: 750;
+	height: auto;
+	line-height: 1.25;
+	margin: 0 0 28px;
+	text-align: left;
+	width: 100%;
+}
+
+.saved-accounts {
+	background: #191831;
+	border: 1px solid #34314f;
+	border-radius: 14px;
+	padding: 14px;
+}
+
+.saved-accounts h2 {
+	color: #efedff;
+}
+
+.saved-accounts p,
+.login-field span {
+	color: #b0acc9;
+}
+
+.saved-account-select,
+.login-field input {
+	background: #292744;
+	border: 1px solid #45416f;
+	border-radius: 11px;
+	color: #f1efff;
+	min-height: 44px;
+}
+
+.saved-account-select:hover {
+	background: #302d54;
+	border-color: #625da0;
+}
+
+.saved-account-remove {
+	border: 1px solid #403d62;
+	border-radius: 9px;
+	color: #b7b2d4;
+}
+
+.saved-account-remove:hover {
+	background: #302d54;
+	color: #ffffff;
+}
+
+.login-field input {
+	box-sizing: border-box;
+	height: 46px;
+}
+
+.login-field input::placeholder {
+	color: #9692b2;
+}
+
+.forgot-password {
+	color: #b7b2ff;
+}
+
+.forgot-password:hover {
+	color: #d8d5ff;
+	text-decoration: underline;
+}
+
+.login-error {
+	background: #482a43;
+	border: 1px solid #73435e;
+	border-radius: 10px;
+	color: #ffd5e0;
+	padding: 10px 12px;
+}
+
+.continue-button {
+	background: #655fc2;
+	border: 1px solid #7973dd;
+	border-radius: 11px;
+	box-shadow: 0 7px 17px #11102e40;
+	color: #ffffff;
+	font-weight: 700;
+	height: 46px;
+	margin-top: 20px;
+	text-align: center;
+}
+
+.continue-button:hover:not(:disabled) {
+	background: #7771dc;
+}
+
+.continue-button:disabled {
+	background: #343250;
+	border-color: #403d5b;
+	box-shadow: none;
+	color: #8986a7;
+}
+
+.forgot-password:focus-visible,
+.continue-button:focus-visible,
+.login-field input:focus-visible,
+.saved-account-select:focus-visible,
+.saved-account-remove:focus-visible {
+	outline: 2px solid #aaa5ff;
+	outline-offset: 2px;
+}
+
+@media (max-width: 600px) {
+	.login-content {
+		border-radius: 18px;
+		margin: 12px;
+		min-height: calc(100% - 24px);
+		padding: 24px 20px;
+		width: calc(100% - 24px);
+	}
+}

@@ -1,0 +1,125 @@
+.signup-screen {
+	--background: #ffffff;
+}
+
+.signup-content {
+	background: #ffffff;
+	box-sizing: border-box;
+	min-height: 100%;
+	margin-inline: auto;
+	max-width: 620px;
+	padding: 8px 13px 32px;
+	width: 100%;
+}
+
+.back-button {
+	align-items: center;
+	background: #ffffff;
+	border: 1px solid #444444;
+	border-radius: 50%;
+	color: #333333;
+	display: inline-flex;
+	font-size: 19px;
+	height: 30px;
+	justify-content: center;
+	line-height: 1;
+	margin: 0 0 10px;
+	padding: 0;
+	width: 30px;
+}
+
+h1 {
+	color: #666666;
+	font-size: 16px;
+	font-weight: 400;
+	margin: 0 0 8px;
+}
+
+.verification-choice {
+	align-items: center;
+	background: #222222;
+	border-radius: 11px;
+	display: flex;
+	gap: 5px;
+	height: 33px;
+	padding: 4px 5px;
+	width: 100%;
+}
+
+.verification-choice button {
+	background: #bdbbbb;
+	border: 0;
+	border-radius: 10px;
+	color: #444444;
+	flex: 1;
+	font: inherit;
+	height: 25px;
+	padding: 0 8px;
+}
+
+.verification-choice button.selected {
+	background: #d9d9d9;
+}
+
+.verification-choice button:focus-visible,
+.signup-field input:focus-visible,
+.back-button:focus-visible {
+	outline: 2px solid #555555;
+	outline-offset: 2px;
+}
+
+.signup-field {
+	display: block;
+	margin-top: 23px;
+}
+
+.signup-field span {
+	color: #b1b1b1;
+	display: block;
+	font-size: 12px;
+	margin: 0 0 5px 2px;
+}
+
+.signup-field input {
+	background: #b8b8b8;
+	border: 0;
+	border-radius: 11px;
+	box-sizing: border-box;
+	color: #333333;
+	font: inherit;
+	height: 35px;
+	padding: 0 12px;
+	width: 100%;
+}
+
+.signup-field input::placeholder {
+	color: #777777;
+}
+
+.confirm-button {
+	background: #b8b8b8;
+	border: 0;
+	border-radius: 8px;
+	box-sizing: border-box;
+	color: #444444;
+	display: block;
+	font: inherit;
+	font-size: 16px;
+	height: 48px;
+	margin-top: 18px;
+	max-width: 24rem;
+	padding: 12px 24px;
+	text-align: left;
+	width: 100%;
+}
+
+.confirm-button:focus-visible {
+	outline: 2px solid #555555;
+	outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+	.signup-content {
+		padding: 10px 12px 24px;
+	}
+}

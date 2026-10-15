@@ -1,0 +1,149 @@
+<ion-content [fullscreen]="true" class="create-server-screen">
+  <main class="create-server-content">
+    <button class="back-button" type="button" (click)="goBack()">Back</button>
+    @if (step === 'template') {
+      <p class="step-indicator">STEP 1 OF 4</p>
+      <h1>Choose a server template</h1>
+      <p>Start with a layout designed for how your group will use this server.</p>
+
+      <div class="template-list" role="group" aria-label="Server templates">
+        @for (template of templates; track template.id) {
+          <button
+            class="template-option"
+            type="button"
+            [class.selected]="selectedTemplateId === template.id"
+            [attr.aria-pressed]="selectedTemplateId === template.id"
+            (click)="selectTemplate(template.id)">
+            <span class="template-mark" [style.background-color]="template.accentColor">
+              {{ template.name.charAt(0) }}
+            </span>
+            <span class="template-copy">
+              <strong>{{ template.name }}</strong>
+              <span>{{ template.description }}</span>
+            </span>
+          </button>
+        }
+      </div>
+
+      <button class="create-button" type="button" (click)="continueToDetails()">Continue</button>
+    } @else if (step === 'details') {
+      <p class="step-indicator">STEP 2 OF 4</p>
+      <h1>Create a server</h1>
+      <p>Name your server.</p>
+
+      <form (ngSubmit)="continueToCustomize()">
+        <label class="server-name-field">
+          <span>Server name</span>
+          <input
+            type="text"
+            name="serverName"
+            [(ngModel)]="serverName"
+            placeholder="Enter a server name"
+            autocomplete="organization"
+            required />
+        </label>
+
+        <button class="create-button" type="submit" [disabled]="!serverName.trim()">Continue</button>
+      </form>
+    } @else if (step === 'customize') {
+      <p class="step-indicator">STEP 3 OF 4</p>
+      <h1>Make it yours</h1>
+      <p>Choose a server color and the channels to start with.</p>
+
+      <button class="invite-friends-button" type="button" (click)="openInviteStep()">
+        <span class="invite-friends-copy">
+          <strong>Add friends</strong>
+          <span>Optional next step</span>
+        </span>
+        <span class="invite-friends-arrow" aria-hidden="true">&gt;</span>
+      </button>
+
+      <section class="server-preview" aria-label="Server preview">
+        <span class="server-preview-badge" [style.background-color]="selectedAccentColor">
+          {{ serverName.charAt(0).toUpperCase() }}
+        </span>
+        <span>{{ serverName.trim() }}</span>
+      </section>
+
+      <fieldset class="accent-picker">
+        <legend>Server color</legend>
+        <div class="accent-swatches">
+          @for (color of accentColors; track color.value) {
+            <button
+              class="accent-swatch"
+              type="button"
+              [style.background-color]="color.value"
+              [class.selected]="selectedAccentColor === color.value"
+              [attr.aria-label]="color.name"
+              [attr.aria-pressed]="selectedAccentColor === color.value"
+              [attr.title]="color.name"
+              (click)="selectedAccentColor = color.value"></button>
+          }
+        </div>
+      </fieldset>
+
+      <fieldset class="starter-channels">
+        <legend>Starter channels</legend>
+        <p class="channel-note">Choose which channels to create with your server.</p>
+        <label class="channel-option">
+          <input type="checkbox" name="includeGeneral" [(ngModel)]="includeGeneral" />
+          <span>#general</span>
+        </label>
+        <label class="channel-option">
+          <input type="checkbox" name="includeWelcome" [(ngModel)]="includeWelcome" />
+          <span>#welcome</span>
+        </label>
+        <label class="channel-option">
+          <input type="checkbox" name="includeRules" [(ngModel)]="includeRules" />
+          <span>#rules</span>
+        </label>
+        <label class="channel-option">
+          <input type="checkbox" name="includeAnnouncements" [(ngModel)]="includeAnnouncements" />
+          <span>#announcements</span>
+        </label>
+        @for (channel of selectedTemplateChannels; track channel.name) {
+          <label class="channel-option">
+            <input
+              type="checkbox"
+              [name]="'templateChannel-' + channel.name"
+              [(ngModel)]="channel.included" />
+            <span>{{ channel.type === 'voice' ? 'Voice: ' : '#' }}{{ channel.name }}</span>
+          </label>
+        }
+      </fieldset>
+
+      <hr class="channel-separator" />
+
+      <section class="additional-channels" aria-labelledby="additional-channels-title">
+        <div class="additional-channels-header">
+          <h2 id="additional-channels-title">Additional channels</h2>
+          <button class="add-channel-button" type="button" (click)="addAdditionalChannel()">+ Add channel</button>
+        </div>
+        @if (additionalChannels.length) {
+          <div class="additional-channel-list">
+            @for (channel of additionalChannels; track channel.id) {
+              <div class="additional-channel-row">
+                <label class="additional-channel-name">
+                  <span class="visually-hidden">Channel name</span>
+                  <input
+                    type="text"
+                    [name]="'additionalChannel-' + channel.id"
+                    [(ngModel)]="channel.name"
+                    placeholder="new-channel"
+                    autocomplete="off" />
+                </label>
+                <button
+                  class="remove-channel-button"
+                  type="button"
+                  [attr.aria-label]="'Remove ' + (channel.name || 'unnamed') + ' channel'"
+                  (click)="removeAdditionalChannel(channel.id)">Remove</button>
+              </div>
+            }
+          </div>
+        }
+      </section>
+
+      <button class="create-button" type="button" (click)="createServer()">Create server</button>
+    }
+  </main>
+</ion-content>

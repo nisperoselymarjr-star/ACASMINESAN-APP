@@ -1,0 +1,107 @@
+.account-details-screen {
+  --background: #ffffff;
+}
+
+.account-details-content {
+  box-sizing: border-box;
+  background: #ffffff;
+  min-height: 100%;
+  margin-inline: auto;
+  max-width: 620px;
+  padding: 8px 13px 32px;
+  width: 100%;
+}
+
+.back-button {
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #444444;
+  border-radius: 50%;
+  color: #333333;
+  display: inline-flex;
+  font-size: 19px;
+  height: 30px;
+  justify-content: center;
+  line-height: 1;
+  margin: 0 0 10px;
+  padding: 0;
+  width: 30px;
+}
+
+h1 {
+  color: #666666;
+  font-size: 16px;
+  font-weight: 400;
+  margin: 0 0 8px;
+}
+
+.details-field {
+  display: block;
+  margin-top: 23px;
+}
+
+.details-field span {
+  color: #888888;
+  display: block;
+  font-size: 12px;
+  margin: 0 0 5px 2px;
+}
+
+.details-field input {
+  background: #b8b8b8;
+  border: 0;
+  border-radius: 11px;
+  box-sizing: border-box;
+  color: #333333;
+  font: inherit;
+  height: 40px;
+  padding: 0 12px;
+  width: 100%;
+}
+
+.details-field input:focus-visible,
+.back-button:focus-visible {
+  outline: 2px solid #555555;
+  outline-offset: 2px;
+}
+
+.details-field input::placeholder {
+  color: #777777;
+}
+
+.create-account-button {
+  background: #222222;
+  border: 0;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #ffffff;
+  font: inherit;
+  font-size: 16px;
+  height: 48px;
+  margin-top: 24px;
+  max-width: 24rem;
+  padding: 12px 24px;
+  width: 100%;
+}
+
+.account-error {
+  color: #b42318;
+  font-size: 13px;
+  margin: 10px 2px 0;
+}
+
+.create-account-button:disabled {
+  background: #b8b8b8;
+  color: #555555;
+}
+
+.create-account-button:focus-visible {
+  outline: 2px solid #555555;
+  outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+  .account-details-content {
+    padding: 10px 12px 24px;
+  }
+}

@@ -1,0 +1,63 @@
+<ion-content [fullscreen]="true" class="login-screen">
+  <main class="login-content">
+    <div class="login-logo">Login</div>
+
+    @if (savedAccounts.length) {
+      <section class="saved-accounts" aria-label="Recent accounts">
+        <h2>Recent accounts</h2>
+        <p>Choose an account, then enter your password. Your browser or device may offer to save it.</p>
+        <div class="saved-account-list">
+          @for (account of savedAccounts; track account) {
+            <div class="saved-account-row">
+              <button class="saved-account-select" type="button" (click)="selectSavedAccount(account)">
+                {{ account }}
+              </button>
+              <button
+                class="saved-account-remove"
+                type="button"
+                [attr.aria-label]="'Remove saved account ' + account"
+                (click)="forgetSavedAccount(account)">
+                Remove
+              </button>
+            </div>
+          }
+        </div>
+      </section>
+    }
+
+    <form #loginForm="ngForm" class="login-form" (ngSubmit)="logIn(loginForm)">
+      <label class="login-field">
+        <span>Email or phone number</span>
+        <input
+          type="text"
+          name="identifier"
+          [(ngModel)]="identifier"
+          (ngModelChange)="errorMessage = ''"
+          autocomplete="username"
+          required />
+      </label>
+
+      <label class="login-field password-field">
+        <span>Password</span>
+        <input
+          #passwordInput
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          (ngModelChange)="errorMessage = ''"
+          autocomplete="current-password"
+          required />
+      </label>
+
+      <button class="forgot-password" type="button">Forgot your password?</button>
+
+      @if (errorMessage) {
+        <p class="login-error" role="alert">{{ errorMessage }}</p>
+      }
+
+      <button class="continue-button" type="submit" [disabled]="loginForm.invalid || isSubmitting">
+        {{ isSubmitting ? 'Checking…' : 'Continue' }}
+      </button>
+    </form>
+  </main>
+</ion-content>

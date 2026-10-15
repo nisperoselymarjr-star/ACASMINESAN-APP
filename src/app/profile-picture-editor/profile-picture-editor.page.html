@@ -1,0 +1,113 @@
+<ion-content [fullscreen]="true" class="profile-editor-screen">
+  <main class="profile-editor-content">
+    <button class="back-button" type="button" (click)="goBack()">Back</button>
+
+    <section class="editor-panel" aria-labelledby="profile-picture-heading">
+      <div class="editor-avatar" [class.has-image]="previewUrl">
+  @if (previewUrl) {
+    <img [src]="previewUrl" alt="Komyunity profile picture" />
+  } @else {
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+  <path
+    fill="#5b5fc7"
+    d="M 52,48 C 42,48 34,56 34,68 L 34,132 C 34,144 42,152 52,152 L 64,152 L 64,111 L 96,152 L 125,152 C 138,152 148,139 140,125 L 114,98 L 140,68 C 148,55 138,48 125,48 L 97,48 L 64,90 L 64,68 C 64,56 56,48 52,48 Z" />
+  <ellipse fill="#ecebff" cx="49" cy="100" rx="6" ry="10" transform="rotate(-8 49 100)" />
+  <ellipse fill="#ecebff" cx="108" cy="76" rx="6" ry="10" transform="rotate(15 108 76)" />
+</svg>
+
+  }
+</div>
+      <h1 id="profile-picture-heading">Edit profile picture</h1>
+      <p>Choose an image to use as your profile picture.</p>
+
+      <label class="choose-image-button">
+        <span>Choose image</span>
+        <input type="file" accept="image/*" (change)="onImageSelected($event)" />
+      </label>
+    </section>
+
+    <section class="profile-section" aria-labelledby="display-name-heading">
+      <div class="section-heading">
+        <h2 id="display-name-heading">Display name</h2>
+      </div>
+      <div class="connection-form">
+        <input
+          type="text"
+          [(ngModel)]="displayNameDraft"
+          maxlength="32"
+          autocomplete="nickname"
+          placeholder="Enter a display name"
+          aria-label="Display name" />
+      </div>
+    </section>
+
+    <section class="profile-section" aria-labelledby="bio-heading">
+      <div class="section-heading">
+        <h2 id="bio-heading">Bio</h2>
+        @if (!isEditingBio) {
+          <button class="text-button" type="button" (click)="startEditingBio()">Edit bio</button>
+        }
+      </div>
+
+      @if (isEditingBio) {
+        <textarea
+          class="bio-input"
+          [(ngModel)]="bioDraft"
+          maxlength="160"
+          rows="4"
+          aria-label="Profile bio"></textarea>
+        <div class="bio-actions">
+          <button class="secondary-button" type="button" (click)="cancelBioEdit()">Cancel</button>
+          <button class="primary-button" type="button" (click)="finishBioEdit()">Done</button>
+        </div>
+      } @else {
+        <p class="bio-text">{{ bioDraft || 'No bio added yet.' }}</p>
+      }
+    </section>
+
+    <section class="profile-section connections-section" aria-labelledby="connections-heading">
+      <div class="section-heading">
+        <h2 id="connections-heading">Connections</h2>
+        <span class="connections-note">Choose your own</span>
+      </div>
+
+      <div class="connection-form">
+        <input
+          type="text"
+          [(ngModel)]="connectionName"
+          placeholder="e.g. Spotify, Steam, GitHub"
+          aria-label="Connection name"
+          (keyup.enter)="addConnection()" />
+        <button class="primary-button" type="button" [disabled]="!connectionName.trim()" (click)="addConnection()">
+          Add
+        </button>
+      </div>
+
+      <div class="connection-list" aria-live="polite">
+        @for (connection of connections; track connection) {
+          <div class="connection-item">
+            <span class="connection-icon">+</span>
+            <span>{{ connection }}</span>
+            <span class="connection-coming-soon">Not connected</span>
+          </div>
+        }
+      </div>
+    </section>
+
+    <div class="profile-save-area">
+      @if (saveError) {
+        <p class="save-error" role="alert">{{ saveError }}</p>
+      }
+      @if (saveMessage) {
+        <p class="save-message" role="status">{{ saveMessage }}</p>
+      }
+      <button
+        class="save-profile-button"
+        type="button"
+        [disabled]="!hasPendingChanges || isSaving"
+        (click)="saveChanges()">
+        {{ isSaving ? 'Saving...' : 'Save changes' }}
+      </button>
+    </div>
+  </main>
+</ion-content>

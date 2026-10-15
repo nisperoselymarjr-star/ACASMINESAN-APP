@@ -1,0 +1,38 @@
+<ion-content [fullscreen]="true" class="account-details-screen">
+  <main class="account-details-content">
+    <button class="back-button" type="button" aria-label="Back" (click)="goBack()">&larr;</button>
+    <h1>Your Details</h1>
+
+    <form #accountForm="ngForm" (ngSubmit)="createAccount(accountForm)">
+      <label class="details-field">
+        <span>Username</span>
+        <input
+          type="text"
+          name="username"
+          [(ngModel)]="username"
+          placeholder="Choose a username"
+          autocomplete="username"
+          required />
+      </label>
+
+      <label class="details-field">
+        <span>Password</span>
+        <input
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="Create a password"
+          autocomplete="new-password"
+          required />
+      </label>
+
+      @if (errorMessage) {
+        <p class="account-error" role="alert">{{ errorMessage }}</p>
+      }
+
+      <button class="create-account-button" type="submit" [disabled]="accountForm.invalid || isSubmitting">
+        {{ isSubmitting ? 'Creating account…' : 'Create account' }}
+      </button>
+    </form>
+  </main>
+</ion-content>

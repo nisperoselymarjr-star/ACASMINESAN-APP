@@ -1,0 +1,713 @@
+<ion-content [fullscreen]="true" class="home-screen">
+  <main class="discord-home">
+    <div
+      class="home-body"
+      [class.mobile-conversation-open]="mobileChannelOpen"
+      [class.mobile-server-open]="!!activeServer && !mobileChannelOpen">
+      <aside class="server-rail" aria-label="Servers">
+        <button class="server friends-server active" type="button" routerLink="/add-friends" aria-label="Open friends">
+          <span class="speech-bubble" aria-hidden="true"></span>
+        </button>
+        <button class="server add-server" type="button" routerLink="/create-server" aria-label="Create a server">
+          +
+        </button>
+        @for (server of joinedServers; track server.name) {
+          <button
+            class="server"
+            type="button"
+            [class.active]="activeServer === server"
+            [attr.aria-label]="'Open ' + server.name"
+                        [style.background-color]="server.accentColor || null"
+                        [style.color]="server.accentColor ? '#ffffff' : null"
+            (click)="selectServer(server)">
+            {{ server.initial }}
+          </button>
+        }
+      </aside>
+
+      <section class="workspace">
+      <header class="workspace-header">
+        <span class="workspace-title">{{ activeServer?.name || 'Home' }}</span>
+        @if (activeServer && canManageServer) {
+          <button class="admin-trigger" type="button" (click)="openAdminPanel()">Server admin</button>
+        }
+      </header>
+
+      <div
+        class="workspace-body"
+        [class.mobile-channel-open]="mobileChannelOpen"
+        [class.mobile-server-open]="!!activeServer && !mobileChannelOpen"
+        [class.voice-channel-open]="activeChannelType === 'voice' && voiceJoined"
+        [class.home-dashboard-open]="!activeServer">
+        @if (activeServer; as server) {
+        <aside class="channel-sidebar" aria-label="Server channels">
+          <div class="channel-sidebar-header">
+            @if (canManageServer) {
+              <div class="server-menu-container" (click)="$event.stopPropagation()">
+                <button
+                  class="server-menu-trigger"
+                  type="button"
+                  aria-haspopup="menu"
+                  [attr.aria-expanded]="serverMenuOpen"
+                  (click)="toggleServerMenu($event)">
+                  <span>{{ activeServer.name }}</span>
+                  <span class="server-menu-arrow" [class.expanded]="serverMenuOpen" aria-hidden="true">›</span>
+                </button>
+                @if (serverMenuOpen) {
+                  <div class="server-menu" role="menu" [attr.aria-label]="activeServer.name + ' actions'">
+                    <button type="button" role="menuitem" (click)="openCreateChannel()">Create Channel</button>
+                    <button type="button" role="menuitem" (click)="openCreateCategory()">Create Category</button>
+                    <button type="button" role="menuitem" (click)="openCreateEvent()">Create Event</button>
+                    <button type="button" role="menuitem" (click)="openInviteDialog()">Invite link</button>
+                    @if (isServerOwner) {
+                      <button class="server-delete-action" type="button" role="menuitem" (click)="requestDeleteServer()">Delete server</button>
+                    }
+                  </div>
+                }
+              </div>
+            } @else {
+              <span class="server-menu-label">{{ activeServer.name }}</span>
+            }
+          </div>
+          @for (category of server.categories; track category.name) {
+          <div class="channel-group">
+            <h2>{{ category.name }}</h2>
+            @for (channel of category.channels; track channel.name) {
+              <div class="channel-row">
+                <button
+                  class="channel-link"
+                  [class.selected]="activeChannel === channel.name"
+                  type="button"
+                  (click)="selectChannel(channel.name)">
+                  <span class="channel-icon">{{ channel.type === 'voice' ? 'V' : '#' }}</span>{{ channel.name }}
+                </button>
+                @if (canManageServer) {
+                  <div class="channel-settings-container" (click)="$event.stopPropagation()">
+                    <button
+                      class="channel-settings-button"
+                      type="button"
+                      [attr.aria-label]="'Settings for ' + channel.name"
+                      aria-haspopup="menu"
+                      [attr.aria-expanded]="channelSettingsOpen === channel.name"
+                      (click)="toggleChannelSettings(channel.name, $event)">⚙</button>
+                    @if (channelSettingsOpen === channel.name) {
+                      <div class="channel-settings-menu" role="menu" [attr.aria-label]="channel.name + ' settings'">
+                        <button
+                          class="channel-delete-action"
+                          type="button"
+                          role="menuitem"
+                          (click)="requestDeleteChannel(channel.name)">Delete channel</button>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+          }
+        </aside>
+
+        @if (activeChannel) {
+          <section
+            class="channel-panel"
+            [class.voice-channel-panel]="activeChannelType === 'voice'"
+            [attr.aria-label]="activeChannelType === 'voice' ? 'Voice channel' : 'Selected text channel'">
+            <div class="channel-heading">
+              @if (mobileChannelOpen) {
+                <button class="channel-back" type="button" aria-label="Back to channels" (click)="returnToChannels()">‹</button>
+              }
+              <span class="channel-heading-icon">{{ activeChannelType === 'voice' ? 'V' : '#' }}</span>
+              <span>{{ activeChannel }}</span>
+              @if (activeChannelType === 'voice' && voiceJoined) {
+                <button
+                  class="voice-chat-toggle"
+                  type="button"
+                  [class.is-active]="voiceChatOpen"
+                  [attr.aria-expanded]="voiceChatOpen"
+                  aria-label="Toggle lobby chat"
+                  (click)="toggleVoiceChat()">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M20 11.5a7.5 7.5 0 0 1-8 7.5 8.7 8.7 0 0 1-3.5-.7L4 20l1.4-3.6A7.1 7.1 0 0 1 4 11.5 7.5 7.5 0 0 1 12 4a7.5 7.5 0 0 1 8 7.5Z"></path>
+                  </svg>
+                </button>
+              }
+            </div>
+            @if (activeChannelType === 'voice') {
+              @if (voiceJoined) {
+                <div class="voice-room-body">
+                  <section class="voice-room-stage" aria-label="Voice lobby">
+                    @if (voiceMediaError) {
+                      <p class="voice-media-error" role="alert">{{ voiceMediaError }}</p>
+                    }
+                    <section class="voice-room-members" aria-label="Members in this lobby">
+                      @for (member of server.members; track member.id) {
+                        <article
+                          class="voice-room-member"
+                          [class.has-live-media]="member.id === currentMemberId && (cameraStream || screenStream)"
+                          [class.has-live-camera]="member.id === currentMemberId && cameraStream && !screenStream">
+                          @if (member.id === currentMemberId && (cameraStream || screenStream)) {
+                            <div class="voice-member-media">
+                              <span>{{ screenStream ? 'Screen' : 'Camera' }}</span>
+                              <video
+                                [srcObject]="screenStream ?? cameraStream"
+                                [class.camera-preview]="cameraStream && !screenStream"
+                                autoplay
+                                playsinline
+                                muted></video>
+                            </div>
+                          }
+                          @if (!(member.id === currentMemberId && cameraStream && !screenStream)) {
+                            <span class="voice-room-member-avatar">
+                              @if (member.id === currentMemberId && profileImage) {
+                                <img [src]="profileImage" [alt]="member.name" />
+                              } @else {
+                                <span aria-hidden="true">{{ member.name.charAt(0).toUpperCase() }}</span>
+                              }
+                              <span class="voice-room-member-status" aria-hidden="true"></span>
+                            </span>
+                          }
+                          <span class="voice-room-member-name">{{ member.name }}@if (member.id === server.ownerId) { <small>Admin</small> }@if (member.id === currentMemberId) { <small>You</small> }</span>
+                        </article>
+                      }
+                    </section>
+                    @if (voiceChatOpen) {
+                      <aside class="voice-chat-drawer" aria-label="Lobby chat">
+                        <h2>Lobby chat</h2>
+                        <div class="voice-chat-messages" aria-live="polite">
+                          @for (message of activeChannelMessages; track $index) {
+                            <article class="chat-message">
+                              <div class="chat-message-meta">
+                                <strong>{{ message.author }}</strong>
+                                <time>{{ message.sentAt | date:'shortTime' }}</time>
+                              </div>
+                              <p>{{ message.content }}</p>
+                            </article>
+                          }
+                        </div>
+                        <form class="message-composer" (ngSubmit)="sendMessage()">
+                          <textarea
+                            name="messageDraft"
+                            [(ngModel)]="messageDraft"
+                            [placeholder]="'Message in ' + activeChannel"
+                            aria-label="Write a lobby message"
+                            rows="1"
+                            maxlength="2000"></textarea>
+                          <button type="submit" [disabled]="!messageDraft.trim()" aria-label="Send message">Send</button>
+                        </form>
+                      </aside>
+                    }
+                    <div class="voice-controls voice-controls-connected" aria-label="Voice controls">
+                      <button
+                        class="microphone-button"
+                        type="button"
+                        [class.is-muted]="!microphoneEnabled"
+                        [attr.aria-label]="microphoneEnabled ? 'Mute microphone' : 'Unmute microphone'"
+                        [attr.title]="microphoneEnabled ? 'Microphone' : 'Microphone muted'"
+                        [attr.aria-pressed]="microphoneEnabled"
+                        (click)="toggleMicrophone()">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                          <path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"></path>
+                          <path d="M19 11v1a7 7 0 0 1-14 0v-1M12 19v3m-4 0h8"></path>
+                          @if (!microphoneEnabled) {
+                            <path d="m4 4 16 16"></path>
+                          }
+                        </svg>
+                      </button>
+                      <button class="voice-feature-button" type="button" [class.is-active]="screenStream" [attr.aria-pressed]="!!screenStream" [attr.aria-label]="screenStream ? 'Stop screen sharing' : 'Share screen'" [attr.title]="screenStream ? 'Stop screen sharing' : 'Share screen'" (click)="toggleScreenShare()">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"></rect><path d="M10 18h4m-2-12v8m-3-3 3-3 3 3"></path></svg>
+                      </button>
+                      <button class="voice-feature-button" type="button" [class.is-active]="cameraStream" [attr.aria-pressed]="!!cameraStream" [attr.aria-label]="cameraStream ? 'Turn camera off' : 'Turn on camera'" [attr.title]="cameraStream ? 'Turn camera off' : 'Turn on camera'" (click)="toggleCamera()">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"></rect><path d="m16 10 5-3v10l-5-3z"></path></svg>
+                      </button>
+                      <button class="voice-feature-button" type="button" [class.is-active]="deafened" [attr.aria-pressed]="deafened" [attr.aria-label]="deafened ? 'Undeafen' : 'Deafen'" [attr.title]="deafened ? 'Undeafen' : 'Deafen'" (click)="toggleDeafen()">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 13v-2a9 9 0 0 1 18 0v2"></path><path d="M5 13h2a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2Zm12 0h2a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2Z"></path>@if (deafened) {<path d="m4 4 16 16"></path>}</svg>
+                      </button>
+                      <button class="join-voice-button is-connected" type="button" aria-label="Leave voice channel" title="Leave voice channel" [attr.aria-pressed]="voiceJoined" (click)="toggleVoiceConnection()">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15.5c3.9-3 10.1-3 14 0l1.3 1a1.5 1.5 0 0 1 .4 1.9l-1 1.6a1.5 1.5 0 0 1-1.8.6l-3-1.1a1.5 1.5 0 0 1-.9-1.4v-1.4a12 12 0 0 0-4 0v1.4a1.5 1.5 0 0 1-.9 1.4l-3 1.1a1.5 1.5 0 0 1-1.8-.6l-1-1.6a1.5 1.5 0 0 1 .4-1.9l1.3-1Z"></path></svg>
+                      </button>
+                    </div>
+                  </section>
+                </div>
+              } @else {
+                <div class="voice-prejoin">
+                  <div class="voice-prejoin-card">
+                    <div class="voice-prejoin-icon" aria-hidden="true">V</div>
+                    <p class="voice-prejoin-eyebrow">VOICE CHANNEL</p>
+                    <h2>Ready to join?</h2>
+                    <p class="voice-prejoin-description">You’re about to join <strong>{{ activeChannel }}</strong>.</p>
+                    <div class="voice-prejoin-controls">
+                      <button
+                        class="microphone-button"
+                        type="button"
+                        [class.is-muted]="!microphoneEnabled"
+                        [attr.aria-label]="microphoneEnabled ? 'Mute microphone before joining' : 'Unmute microphone before joining'"
+                        [attr.aria-pressed]="microphoneEnabled"
+                        (click)="toggleMicrophone()">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                          <path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"></path>
+                          <path d="M19 11v1a7 7 0 0 1-14 0v-1M12 19v3m-4 0h8"></path>
+                          @if (!microphoneEnabled) {
+                            <path d="m4 4 16 16"></path>
+                          }
+                        </svg>
+                      </button>
+                      <button
+                        class="join-voice-button"
+                        type="button"
+                        [attr.aria-pressed]="voiceJoined"
+                        (click)="toggleVoiceConnection()">Join Voice</button>
+                    </div>
+                  </div>
+                </div>
+              }
+            }
+            @if (activeChannelType !== 'voice') {
+              <div class="chat-messages" aria-live="polite" aria-label="Messages">
+                @for (message of activeChannelMessages; track $index) {
+                  <article class="chat-message">
+                    <div class="chat-message-meta">
+                      <strong>{{ message.author }}</strong>
+                      <time>{{ message.sentAt | date:'shortTime' }}</time>
+                    </div>
+                    <p>{{ message.content }}</p>
+                  </article>
+                }
+              </div>
+              <form class="message-composer" (ngSubmit)="sendMessage()">
+                <textarea
+                  name="messageDraft"
+                  [(ngModel)]="messageDraft"
+                  [placeholder]="'Message #' + activeChannel"
+                  aria-label="Write a message"
+                  rows="1"
+                  maxlength="2000"></textarea>
+                <button type="submit" [disabled]="!messageDraft.trim()" aria-label="Send message">Send</button>
+              </form>
+            }
+          </section>
+        }
+        <aside class="members-sidebar" aria-label="Server members">
+          <div class="members-header">Members <span>{{ server.members.length }}</span></div>
+          @for (group of memberGroups; track group.name) {
+            <section class="member-group">
+              <h2>{{ group.name }} <span>{{ group.members.length }}</span></h2>
+              @for (member of group.members; track member.id) {
+                <button
+                  class="member-row"
+                  type="button"
+                  [attr.aria-label]="'Open profile for ' + member.name"
+                  [attr.aria-expanded]="selectedMember?.id === member.id"
+                  (click)="openMemberProfile(member, $event)">
+                  <span class="member-avatar" aria-hidden="true">{{ member.name.charAt(0).toUpperCase() }}</span>
+                  <span class="member-identity">
+                    <span class="member-name">{{ member.name }}</span>
+                    <span class="member-status">
+                      <span
+                        class="member-status-dot"
+                        [class.status-online]="!member.status || member.status === 'online'"
+                        [class.status-idle]="member.status === 'idle'"
+                        [class.status-do-not-disturb]="member.status === 'do-not-disturb'"
+                        [class.status-invisible]="member.status === 'invisible'"
+                        aria-hidden="true"></span>
+                      {{ getMemberStatusLabel(member.status) }}
+                    </span>
+                  </span>
+                </button>
+              }
+            </section>
+          }
+        </aside>
+        } @else {
+          <section class="home-dashboard" aria-label="Home dashboard">
+            <header class="home-dashboard-welcome">
+              <div class="home-dashboard-copy">
+                <p class="home-dashboard-eyebrow">YOUR KOMYUNITY</p>
+                <h1>Welcome back</h1>
+                <p>{{ displayName }}, your people and conversations in one place.</p>
+              </div>
+              <div class="home-space-count" aria-label="{{ joinedServers.length }} spaces">
+                <strong>{{ joinedServers.length }}</strong>
+                <span>{{ joinedServers.length === 1 ? 'space' : 'spaces' }}</span>
+              </div>
+            </header>
+
+            <section class="home-quick-actions" aria-label="Quick actions">
+              <button class="home-action-card home-create-card" type="button" routerLink="/create-server">
+                <span class="home-action-icon" aria-hidden="true">+</span>
+                <span class="home-action-copy">
+                  <strong>Create a space</strong>
+                  <small>Start a community of your own</small>
+                </span>
+                <span class="home-action-arrow" aria-hidden="true">›</span>
+              </button>
+              <button class="home-action-card home-friends-card" type="button" routerLink="/add-friends">
+                <span class="home-action-icon" aria-hidden="true">♡</span>
+                <span class="home-action-copy">
+                  <strong>Find your people</strong>
+                  <small>Connect with friends on Komyunity</small>
+                </span>
+                <span class="home-action-arrow" aria-hidden="true">›</span>
+              </button>
+            </section>
+
+            <section class="home-spaces-section" aria-label="Your spaces">
+              <div class="home-section-heading">
+                <div>
+                  <h2>Your spaces</h2>
+                  <p>Pick up where your community is talking.</p>
+                </div>
+                @if (joinedServers.length > 0) {
+                  <span class="home-section-count">{{ joinedServers.length }}</span>
+                }
+              </div>
+              @if (joinedServers.length > 0) {
+                <div class="home-server-grid">
+                  @for (server of joinedServers; track server.name) {
+                    <button class="home-server-card" type="button" (click)="selectServer(server)">
+                      <span
+                        class="home-server-avatar"
+                        [style.background-color]="server.accentColor || null"
+                        [style.color]="server.accentColor ? '#ffffff' : null">
+                        {{ server.initial }}
+                      </span>
+                      <span class="home-server-details">
+                        <strong>{{ server.name }}</strong>
+                        <small>{{ server.members.length }} {{ server.members.length === 1 ? 'member' : 'members' }}</small>
+                      </span>
+                      <span class="home-server-arrow" aria-hidden="true">›</span>
+                    </button>
+                  }
+                </div>
+              } @else {
+                <div class="home-no-spaces">
+                  <span class="home-no-spaces-mark" aria-hidden="true">✦</span>
+                  <span><strong>Your spaces will show up here</strong><small>Create one or find friends to get started.</small></span>
+                </div>
+              }
+            </section>
+          </section>
+        }
+      </div>
+
+      @if (adminPanelOpen) {
+        <div class="admin-backdrop" (click)="closeAdminPanel()">
+          <section class="admin-dialog" role="dialog" aria-modal="true" aria-labelledby="admin-title" (click)="$event.stopPropagation()">
+            <button class="admin-close" type="button" aria-label="Close server admin" (click)="closeAdminPanel()">×</button>
+            <h2 id="admin-title">Server admin</h2>
+            <div class="admin-sections" aria-label="Admin sections">
+              <button type="button" [class.selected]="adminSection === 'channels'" [attr.aria-pressed]="adminSection === 'channels'" (click)="adminSection = 'channels'">Channels</button>
+              <button type="button" [class.selected]="adminSection === 'roles'" [attr.aria-pressed]="adminSection === 'roles'" (click)="adminSection = 'roles'">Roles</button>
+              @if (isServerOwner) {
+                <button type="button" [class.selected]="adminSection === 'members'" [attr.aria-pressed]="adminSection === 'members'" (click)="adminSection = 'members'">Members</button>
+              }
+            </div>
+            @if (adminSection === 'channels') {
+              <form (ngSubmit)="createChannel()">
+                <label class="admin-field">
+                  <span>Channel name</span>
+                  <input type="text" name="newChannelName" [(ngModel)]="newChannelName" autocomplete="off" required />
+                </label>
+                <label class="admin-field">
+                  <span>Channel type</span>
+                  <select name="newChannelType" [(ngModel)]="newChannelType">
+                    <option value="text">Text</option>
+                    <option value="voice">Voice</option>
+                  </select>
+                </label>
+                @if (activeServer; as server) {
+                  <label class="admin-field">
+                    <span>Category</span>
+                    <select name="newChannelCategory" [(ngModel)]="newChannelCategory">
+                      <option value="">Default category</option>
+                      @for (category of server.categories; track category.name) {
+                        <option [value]="category.name">{{ category.name }}</option>
+                      }
+                    </select>
+                  </label>
+                }
+                @if (channelError) {
+                  <p class="admin-error" role="alert">{{ channelError }}</p>
+                }
+                <button class="admin-action" type="submit" [disabled]="!newChannelName.trim()">Create channel</button>
+              </form>
+            } @else if (adminSection === 'roles') {
+              @if (activeServer; as server) {
+                <form (ngSubmit)="createRole()">
+                  <label class="admin-field">
+                    <span>New role</span>
+                    <input type="text" name="newRoleName" [(ngModel)]="newRoleName" autocomplete="off" required />
+                  </label>
+                  @if (roleError) {
+                    <p class="admin-error" role="alert">{{ roleError }}</p>
+                  }
+                  <button class="admin-action" type="submit" [disabled]="!newRoleName.trim()">Create role</button>
+                </form>
+                <section class="role-assignments" aria-label="Assign roles to members">
+                  <h3>Member roles</h3>
+                  @for (member of server.members; track member.id; let memberIndex = $index) {
+                    <label class="role-assignment">
+                      <span>{{ member.name }}</span>
+                      <select [name]="'memberRole' + memberIndex" [ngModel]="member.role ?? ''" (ngModelChange)="assignMemberRole(member, $event)">
+                        <option value="">No role</option>
+                        @for (role of server.roles; track role) {
+                          <option [value]="role">{{ role }}</option>
+                        }
+                      </select>
+                    </label>
+                  }
+                </section>
+              }
+            } @else if (isServerOwner) {
+              @if (activeServer; as server) {
+                <section class="role-assignments" aria-label="Appoint server admins">
+                  <h3>Member authority</h3>
+                  <p class="admin-help">Only the server owner can appoint admins.</p>
+                  @for (member of server.members; track member.id; let memberIndex = $index) {
+                    <label class="role-assignment">
+                      <span>{{ member.name }}</span>
+                      @if (member.id === server.ownerId) {
+                        <span class="owner-label">Owner</span>
+                      } @else {
+                        <select [name]="'memberAuthority' + memberIndex" [ngModel]="member.authority" (ngModelChange)="assignMemberAuthority(member, $event)">
+                          <option value="member">Member</option>
+                          <option value="admin">Admin</option>
+                        </select>
+                      }
+                    </label>
+                  }
+                </section>
+              }
+            }
+          </section>
+        </div>
+      }
+      @if (inviteDialogOpen && canManageServer && activeServer; as server) {
+        <div class="admin-backdrop" (click)="closeInviteDialog()">
+          <section class="admin-dialog invite-dialog" role="dialog" aria-modal="true" aria-labelledby="invite-title" (click)="$event.stopPropagation()">
+            <button class="admin-close" type="button" aria-label="Close invite dialog" (click)="closeInviteDialog()">×</button>
+            <h2 id="invite-title">Invite to {{ server.name }}</h2>
+            <p class="invite-description">Share this link or code with someone you want to invite.</p>
+            <label class="admin-field">
+              <span>Invite link</span>
+              <input type="text" [value]="inviteLink" readonly />
+            </label>
+            <button class="admin-action" type="button" (click)="copyInviteLink()">Copy invite link</button>
+            @if (inviteStatus) {
+              <p class="invite-description" role="status" aria-live="polite">{{ inviteStatus }}</p>
+            }
+            <div class="invite-code-row">
+              <span>Invite code</span>
+              <code>{{ server.inviteCode }}</code>
+            </div>
+            <button class="admin-action" type="button" (click)="sendInvite()">Send invite</button>
+            @if (invitePreviewVisible) {
+              <article class="invite-preview" aria-live="polite">
+                <div class="invite-preview-server-icon" aria-hidden="true">{{ server.initial }}</div>
+                <div class="invite-preview-details">
+                  <span class="invite-preview-label">Server invite</span>
+                  <strong>{{ server.name }}</strong>
+                  <span>{{ server.members.length }} {{ server.members.length === 1 ? 'member' : 'members' }}</span>
+                </div>
+              </article>
+            }
+          </section>
+        </div>
+      }
+      @if (categoryDialogOpen && activeServer && canManageServer) {
+        <div class="admin-backdrop" (click)="categoryDialogOpen = false">
+          <section class="admin-dialog" role="dialog" aria-modal="true" aria-labelledby="category-title" (click)="$event.stopPropagation()">
+            <button class="admin-close" type="button" aria-label="Close create category" (click)="categoryDialogOpen = false">×</button>
+            <h2 id="category-title">Create Category</h2>
+            <form (ngSubmit)="createCategory()">
+              <label class="admin-field">
+                <span>Category name</span>
+                <input type="text" name="newCategoryName" [(ngModel)]="newCategoryName" autocomplete="off" required />
+              </label>
+              @if (categoryError) {
+                <p class="admin-error" role="alert">{{ categoryError }}</p>
+              }
+              <button class="admin-action" type="submit" [disabled]="!newCategoryName.trim()">Create category</button>
+            </form>
+          </section>
+        </div>
+      }
+      @if (eventDialogOpen && activeServer && canManageServer) {
+        <div class="admin-backdrop" (click)="eventDialogOpen = false">
+          <section class="admin-dialog" role="dialog" aria-modal="true" aria-labelledby="event-title" (click)="$event.stopPropagation()">
+            <button class="admin-close" type="button" aria-label="Close create event" (click)="eventDialogOpen = false">×</button>
+            <h2 id="event-title">Create Event</h2>
+            <form (ngSubmit)="createEvent()">
+              <label class="admin-field">
+                <span>Event name</span>
+                <input type="text" name="newEventTitle" [(ngModel)]="newEventTitle" autocomplete="off" required />
+              </label>
+              <label class="admin-field">
+                <span>Event date</span>
+                <input type="date" name="newEventDate" [(ngModel)]="newEventDate" [min]="todayDate" required />
+              </label>
+              <label class="admin-field">
+                <span>Description (optional)</span>
+                <textarea name="newEventDescription" [(ngModel)]="newEventDescription" rows="3"></textarea>
+              </label>
+              @if (eventError) {
+                <p class="admin-error" role="alert">{{ eventError }}</p>
+              }
+              <button class="admin-action" type="submit" [disabled]="!newEventTitle.trim() || !newEventDate">Create event</button>
+            </form>
+          </section>
+        </div>
+      }
+      @if (activeDueEvent; as dueEvent) {
+        <div class="admin-backdrop event-notification-backdrop">
+          <section class="admin-dialog event-notification" role="dialog" aria-modal="true" aria-labelledby="due-event-title">
+            <span class="event-notification-label">Today's event · {{ dueEvent.serverName }}</span>
+            <h2 id="due-event-title">{{ dueEvent.event.title }}</h2>
+            <p class="event-notification-date">{{ dueEvent.event.date }}</p>
+            @if (dueEvent.event.description) {
+              <p class="event-notification-description">{{ dueEvent.event.description }}</p>
+            }
+            <button class="admin-action" type="button" (click)="dismissDueEvent()">Got it</button>
+          </section>
+        </div>
+      }
+      @if (deleteConfirmation; as confirmation) {
+        <div class="admin-backdrop" (click)="deleteConfirmation = null">
+          <section class="admin-dialog delete-confirm-dialog" role="alertdialog" aria-modal="true" aria-labelledby="delete-confirm-title" (click)="$event.stopPropagation()">
+            <button class="admin-close" type="button" aria-label="Cancel deletion" (click)="deleteConfirmation = null">×</button>
+            <h2 id="delete-confirm-title">Delete {{ confirmation.type === 'server' ? 'server' : 'channel' }}?</h2>
+            @if (confirmation.type === 'server') {
+              <p>This will permanently remove <strong>{{ confirmation.name }}</strong> and all of its channels.</p>
+            } @else {
+              <p>This will permanently remove only the channel <strong>{{ confirmation.name }}</strong>. The server will remain.</p>
+            }
+            <div class="delete-confirm-actions">
+              <button class="delete-cancel-action" type="button" (click)="deleteConfirmation = null">Cancel</button>
+              <button class="delete-confirm-action" type="button" (click)="confirmDelete()">Delete</button>
+            </div>
+          </section>
+        </div>
+      }
+      @if (selectedMember; as member) {
+        <div class="member-profile-layer" (click)="closeMemberProfile()" (keydown.escape)="closeMemberProfile()">
+          <article class="member-profile-card" role="dialog" [attr.aria-label]="member.name + ' profile'" [ngStyle]="memberProfilePosition" (click)="$event.stopPropagation()">
+            <button class="member-profile-close" type="button" aria-label="Close member profile" (click)="closeMemberProfile()">×</button>
+            <div class="member-profile-heading">
+              <span class="member-profile-avatar" aria-hidden="true">{{ member.name.charAt(0).toUpperCase() }}</span>
+              <div>
+                <span class="member-profile-eyebrow">Member profile</span>
+                <h2>{{ member.name }}</h2>
+              </div>
+            </div>
+            <dl class="member-profile-details">
+              <div>
+                <dt>Server authority</dt>
+                <dd>{{ member.authority }}</dd>
+              </div>
+              <div>
+                <dt>Status</dt>
+                <dd>{{ getMemberStatusLabel(member.status) }}</dd>
+              </div>
+              @if (member.role) {
+                <div>
+                  <dt>Role</dt>
+                  <dd>{{ member.role }}</dd>
+                </div>
+              }
+            </dl>
+            <button
+              class="friend-action"
+              type="button"
+              [disabled]="isCurrentMember(member) || hasFriendRequest(member)"
+              (click)="addFriend(member)">
+              {{ isCurrentMember(member) ? 'You' : hasFriendRequest(member) ? 'Request sent' : 'Add friend' }}
+            </button>
+          </article>
+        </div>
+      }
+      </section>
+    </div>
+
+    <div class="profile-bar home-profile-bar">
+      <button
+        class="profile-avatar"
+        type="button"
+        [attr.aria-label]="'Open account menu. Current status: ' + status"
+        aria-haspopup="menu"
+        [attr.aria-expanded]="accountMenuOpen"
+        (click)="toggleAccountMenu($event)">
+        @if (profileImage) {
+          <img class="profile-avatar-image" [src]="profileImage" alt="" />
+        } @else {
+          K
+        }
+        <span
+          class="profile-status-dot"
+          [class.status-online]="status === 'online'"
+          [class.status-idle]="status === 'idle'"
+          [class.status-do-not-disturb]="status === 'do-not-disturb'"
+          [class.status-invisible]="status === 'invisible'"
+          aria-hidden="true"></span>
+      </button>
+      <button
+        class="profile-navigation"
+        type="button"
+        routerLink="/profile-picture-editor"
+        aria-label="Edit profile picture">
+        <span class="profile-details">
+          <strong>{{ displayName }}</strong>
+          <span>Edit profile picture</span>
+        </span>
+        <span class="profile-arrow" aria-hidden="true">&gt;</span>
+      </button>
+
+      @if (accountMenuOpen) {
+        <div class="account-menu" role="menu" aria-label="Account options">
+          <div role="group" aria-label="Set status">
+            <h2>Set status</h2>
+            @for (option of statusOptions; track option.value) {
+              <button
+                class="status-option"
+                [class.selected]="status === option.value"
+                type="button"
+                role="menuitemradio"
+                [attr.aria-checked]="status === option.value"
+                (click)="setStatus(option.value)">
+                <span [class]="'status-dot status-' + option.value" aria-hidden="true"></span>
+                <span>{{ option.label }}</span>
+                @if (status === option.value) {
+                  <span class="status-check" aria-hidden="true">&#10003;</span>
+                }
+              </button>
+            }
+          </div>
+          <div class="account-menu-actions" role="group" aria-label="Account actions">
+            <h2>Account</h2>
+            <button class="status-option" type="button" role="menuitem" (click)="openAccountManager()">Manage account</button>
+            <button class="status-option" type="button" role="menuitem" (click)="switchAccount()">Switch account</button>
+          </div>
+        </div>
+      }
+
+      @if (accountManagerOpen) {
+        <div class="admin-backdrop" (click)="closeAccountManager()">
+          <section class="admin-dialog account-dialog" role="dialog" aria-modal="true" aria-labelledby="account-title" (click)="$event.stopPropagation()">
+            <button class="admin-close" type="button" aria-label="Close account manager" (click)="closeAccountManager()">×</button>
+            @if (confirmAccountRemoval) {
+              <h2 id="account-title">Remove account?</h2>
+              <p class="account-description">This removes the current sign-in from this device. It does not delete the account.</p>
+              <button class="admin-action" type="button" (click)="removeAccountFromDevice()">Remove from this device</button>
+              <button class="account-secondary-action" type="button" (click)="confirmAccountRemoval = false">Keep account</button>
+            } @else {
+              <h2 id="account-title">Manage account</h2>
+              <p class="account-name">{{ displayName }}</p>
+              <p class="account-description">Signed in on this device</p>
+              <button class="admin-action" type="button" (click)="switchAccount()">Switch account</button>
+              <button class="account-secondary-action" type="button" (click)="logOut()">Log out</button>
+              <button class="account-remove-action" type="button" (click)="confirmAccountRemoval = true">Remove account from this device</button>
+            }
+          </section>
+        </div>
+      }
+    </div>
+  </main>
+</ion-content>

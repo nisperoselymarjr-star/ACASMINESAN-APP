@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Build output
+www/
+dist/
+.angular/
+
+# Environment and local secrets
+.env
+.env.*
+!.env.example
+
+# System files
+.DS_Store
+Thumbs.db

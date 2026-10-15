@@ -1,0 +1,714 @@
+.create-server-screen {
+  --background: #ffffff;
+}
+
+.create-server-content {
+  background: #ffffff;
+  box-sizing: border-box;
+  min-height: 100%;
+  margin-inline: auto;
+  max-width: 680px;
+  padding: 18px 17px 32px;
+  width: 100%;
+}
+
+.back-button {
+  background: transparent;
+  border: 0;
+  color: #666666;
+  font: inherit;
+  padding: 0;
+}
+
+h1 {
+  color: #444444;
+  font-size: 22px;
+  font-weight: 500;
+  margin: 0 0 8px;
+}
+
+p {
+  color: #888888;
+  font-size: 14px;
+  margin: 0 0 28px;
+}
+
+.step-indicator {
+  color: #666666;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin: 34px 0 8px;
+}
+
+  .template-list {
+    display: grid;
+    gap: 8px;
+    margin: 22px 0 8px;
+  }
+
+  .template-option {
+    align-items: center;
+    background: #f4f5f9;
+    border: 1px solid #dedfe5;
+    border-radius: 8px;
+    color: #333333;
+    cursor: pointer;
+    display: flex;
+    gap: 12px;
+    min-height: 68px;
+    padding: 10px;
+    text-align: left;
+    width: 100%;
+  }
+
+  .template-option.selected {
+    border-color: #3267d6;
+    box-shadow: 0 0 0 1px #3267d6;
+  }
+
+  .template-mark {
+    align-items: center;
+    border-radius: 8px;
+    color: #ffffff;
+    display: inline-flex;
+    flex: 0 0 40px;
+    font-size: 16px;
+    font-weight: 700;
+    height: 40px;
+    justify-content: center;
+  }
+
+  .template-copy {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .template-copy strong {
+    font-size: 14px;
+  }
+
+  .template-copy > span {
+    color: #70737c;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .server-name-field {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.server-name-field span {
+  color: #666666;
+  display: block;
+  font-size: 12px;
+  margin: 0 0 6px 2px;
+}
+
+.server-name-field input {
+  background: #dedede;
+  border: 0;
+  border-radius: 11px;
+  box-sizing: border-box;
+  color: #333333;
+  font: inherit;
+  height: 40px;
+  padding: 0 12px;
+  width: 100%;
+}
+
+.create-button {
+  background: #222222;
+  border: 0;
+  border-radius: 11px;
+  color: #ffffff;
+  font: inherit;
+  height: 40px;
+  margin-top: 18px;
+  padding: 0 14px;
+  text-align: left;
+  width: 100%;
+}
+
+.create-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.server-preview {
+  align-items: center;
+  background: #f4f5f9;
+  border: 1px solid #dedfe5;
+  border-radius: 12px;
+  color: #333333;
+  display: flex;
+  font-weight: 600;
+  gap: 12px;
+  margin: 24px 0;
+  min-height: 70px;
+  padding: 12px;
+}
+
+.server-preview-badge {
+  align-items: center;
+  border-radius: 12px;
+  color: #ffffff;
+  display: inline-flex;
+  flex: 0 0 44px;
+  font-size: 18px;
+  font-weight: 700;
+  height: 44px;
+  justify-content: center;
+  width: 44px;
+}
+
+.accent-picker,
+.starter-channels {
+  border: 0;
+  margin: 0 0 24px;
+  min-width: 0;
+  padding: 0;
+}
+
+.accent-picker legend,
+.starter-channels legend {
+  color: #444444;
+  font-size: 14px;
+  font-weight: 650;
+  margin-bottom: 12px;
+}
+
+.accent-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.accent-swatch {
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px #c8cbd3;
+  cursor: pointer;
+  height: 32px;
+  padding: 0;
+  width: 32px;
+}
+
+.accent-swatch.selected {
+  box-shadow: 0 0 0 2px #222222;
+}
+
+.starter-channels {
+  background: #f4f5f9;
+  border: 1px solid #dedfe5;
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.starter-channels legend {
+  padding: 0 4px;
+}
+
+.channel-note {
+  font-size: 12px;
+  margin: -4px 0 10px;
+}
+
+.channel-option {
+  align-items: center;
+  color: #444444;
+  display: flex;
+  gap: 10px;
+  min-height: 36px;
+}
+
+.channel-option input {
+  accent-color: #3267d6;
+  height: 16px;
+  width: 16px;
+}
+
+.channel-separator {
+  border: 0;
+  border-top: 1px solid #dedfe5;
+  margin: 24px 0;
+}
+
+.additional-channels-header {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.additional-channels-header h2 {
+  color: #444444;
+  font-size: 14px;
+  font-weight: 650;
+  margin: 0;
+}
+
+.add-channel-button,
+.remove-channel-button {
+  background: transparent;
+  border: 0;
+  color: #3267d6;
+  cursor: pointer;
+  font: inherit;
+  min-height: 36px;
+  padding: 4px 8px;
+}
+
+.additional-channel-list {
+  display: grid;
+  gap: 8px;
+}
+
+.additional-channel-row {
+  align-items: center;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.additional-channel-name input {
+  background: #f4f5f9;
+  border: 1px solid #dedfe5;
+  border-radius: 9px;
+  box-sizing: border-box;
+  color: #333333;
+  font: inherit;
+  height: 40px;
+  min-width: 0;
+  padding: 0 10px;
+  width: 100%;
+}
+
+.remove-channel-button {
+  color: #a43d3d;
+}
+
+.invite-friends-button {
+  align-items: center;
+  background: #f4f5f9;
+  border: 1px solid #dedfe5;
+  border-radius: 10px;
+  color: #333333;
+  cursor: pointer;
+  display: flex;
+  font: inherit;
+  justify-content: space-between;
+  margin: 20px 0 24px;
+  min-height: 58px;
+  padding: 8px 12px;
+  text-align: left;
+  width: 100%;
+}
+
+.invite-friends-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.invite-friends-copy strong {
+  font-size: 13px;
+}
+
+.invite-friends-copy > span {
+  color: #777777;
+  font-size: 12px;
+}
+
+.invite-friends-arrow {
+  color: #777777;
+  font-size: 20px;
+}
+
+.friend-search-field {
+  display: block;
+  margin: 24px 0 16px;
+}
+
+.friend-search-field > span {
+  color: #666666;
+  display: block;
+  font-size: 12px;
+  margin: 0 0 6px 2px;
+}
+
+.friend-search-field input {
+  background: #f4f5f9;
+  border: 1px solid #dedfe5;
+  border-radius: 9px;
+  box-sizing: border-box;
+  color: #333333;
+  font: inherit;
+  height: 40px;
+  padding: 0 10px;
+  width: 100%;
+}
+
+.friend-picker {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.friend-option {
+  align-items: center;
+  background: #f4f5f9;
+  border: 1px solid #dedfe5;
+  border-radius: 8px;
+  color: #333333;
+  cursor: pointer;
+  display: flex;
+  gap: 10px;
+  min-height: 58px;
+  padding: 8px 10px;
+}
+
+.friend-option > input {
+  accent-color: #3267d6;
+  height: 16px;
+  width: 16px;
+}
+
+.friend-avatar {
+  align-items: center;
+  background: #d8e1f2;
+  border-radius: 50%;
+  color: #344c74;
+  display: inline-flex;
+  flex: 0 0 34px;
+  font-size: 13px;
+  font-weight: 700;
+  height: 34px;
+  justify-content: center;
+}
+
+.friend-identity {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.friend-identity strong {
+  font-size: 13px;
+}
+
+.friend-identity > span,
+.friend-list-message {
+  color: #70737c;
+  font-size: 12px;
+}
+
+.friend-list-message {
+  margin: 16px 0 24px;
+}
+
+.visually-hidden {
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+button:focus-visible,
+.server-name-field input:focus-visible,
+.additional-channel-name input:focus-visible,
+.friend-search-field input:focus-visible {
+  outline: 2px solid #555555;
+  outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+  .create-server-content {
+    padding: 14px 12px 24px;
+  }
+
+  h1 {
+    margin-top: 0;
+  }
+
+  .step-indicator {
+    margin-top: 24px;
+  }
+}
+
+.create-server-screen {
+  --background: #17162e;
+  background: #17162e;
+  color: #eeecff;
+}
+
+.create-server-content {
+  background: linear-gradient(155deg, #211f3e, #1b1a35 72%);
+  border: 1px solid #393756;
+  border-radius: 22px;
+  box-shadow: 0 18px 48px #0d0c203d;
+  color: #eeecff;
+  margin-block: 24px;
+  padding: 26px;
+}
+
+.back-button {
+  background: #252341;
+  border: 1px solid #403d62;
+  border-radius: 9px;
+  color: #c5c1ff;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 650;
+  min-height: 36px;
+  padding: 0 12px;
+}
+
+.back-button:hover {
+  background: #302d54;
+  border-color: #625da0;
+}
+
+h1 {
+  color: #f1efff;
+  font-size: 24px;
+  font-weight: 750;
+  letter-spacing: -0.025em;
+}
+
+p {
+  color: #aaa6c3;
+  line-height: 1.55;
+}
+
+.step-indicator {
+  color: #aaa5ff;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+}
+
+.template-list {
+  gap: 10px;
+}
+
+.template-option {
+  background: #24223f;
+  border: 1px solid #393756;
+  border-radius: 13px;
+  color: #eeecff;
+  min-height: 72px;
+  transition: background-color 140ms ease, border-color 140ms ease, transform 140ms ease;
+}
+
+.template-option:hover {
+  background: #2b294b;
+  border-color: #625da0;
+  transform: translateY(-1px);
+}
+
+.template-option.selected {
+  background: #302d54;
+  border-color: #8a84f2;
+  box-shadow: 0 0 0 1px #8a84f2, 0 6px 16px #0d0c202e;
+}
+
+.template-mark {
+  border: 1px solid #ffffff24;
+  border-radius: 11px;
+}
+
+.template-copy strong {
+  color: #f1efff;
+}
+
+.template-copy > span {
+  color: #b4b0ce;
+}
+
+.server-name-field span,
+.friend-search-field > span {
+  color: #c0bdd7;
+}
+
+.server-name-field input,
+.additional-channel-name input,
+.friend-search-field input {
+  background: #252341;
+  border: 1px solid #403d62;
+  border-radius: 11px;
+  color: #f0eeff;
+  min-height: 44px;
+}
+
+.server-name-field input::placeholder,
+.additional-channel-name input::placeholder,
+.friend-search-field input::placeholder {
+  color: #9692b2;
+}
+
+.server-name-field input:focus,
+.additional-channel-name input:focus,
+.friend-search-field input:focus {
+  border-color: #817bed;
+  box-shadow: 0 0 0 3px #817bed24;
+  outline: 0;
+}
+
+.create-button {
+  background: #655fc2;
+  border: 1px solid #7973dd;
+  border-radius: 11px;
+  box-shadow: 0 7px 17px #11102e40;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 700;
+  min-height: 44px;
+  text-align: center;
+  transition: background-color 140ms ease, box-shadow 140ms ease;
+}
+
+.create-button:hover:not(:disabled) {
+  background: #7771dc;
+  box-shadow: 0 9px 20px #11102e50;
+}
+
+.create-button:disabled {
+  background: #343250;
+  border-color: #403d5b;
+  box-shadow: none;
+  color: #8986a7;
+}
+
+.server-preview {
+  background: #24223f;
+  border: 1px solid #393756;
+  border-radius: 13px;
+  color: #f0eeff;
+}
+
+.server-preview-badge {
+  border: 1px solid #ffffff24;
+  border-radius: 12px;
+}
+
+.accent-picker legend,
+.starter-channels legend,
+.additional-channels-header h2 {
+  color: #eeecff;
+}
+
+.accent-swatch {
+  border-color: #211f3e;
+  box-shadow: 0 0 0 1px #59557b;
+  transition: box-shadow 140ms ease, transform 140ms ease;
+}
+
+.accent-swatch:hover {
+  box-shadow: 0 0 0 2px #aaa5ff;
+  transform: scale(1.08);
+}
+
+.accent-swatch.selected {
+  box-shadow: 0 0 0 2px #aaa5ff, 0 0 0 4px #211f3e;
+}
+
+.starter-channels {
+  background: #1a1933;
+  border: 1px solid #393756;
+  border-radius: 13px;
+  padding: 14px;
+}
+
+.channel-note,
+.channel-option {
+  color: #b7b3d0;
+}
+
+.channel-option {
+  border-radius: 8px;
+  padding-inline: 7px;
+  transition: background-color 140ms ease;
+}
+
+.channel-option:hover {
+  background: #292744;
+}
+
+.channel-option input,
+.friend-option > input {
+  accent-color: #8a84f2;
+}
+
+.channel-separator {
+  border-color: #393756;
+}
+
+.add-channel-button,
+.remove-channel-button {
+  border-radius: 8px;
+  color: #b7b2ff;
+}
+
+.add-channel-button:hover {
+  background: #302d54;
+}
+
+.remove-channel-button {
+  color: #f0a2bd;
+}
+
+.invite-friends-button,
+.friend-option {
+  background: #24223f;
+  border: 1px solid #393756;
+  border-radius: 12px;
+  color: #eeecff;
+  transition: background-color 140ms ease, border-color 140ms ease;
+}
+
+.invite-friends-button:hover,
+.friend-option:hover {
+  background: #2b294b;
+  border-color: #625da0;
+}
+
+.invite-friends-copy strong,
+.friend-identity strong {
+  color: #f0eeff;
+}
+
+.invite-friends-copy > span,
+.invite-friends-arrow,
+.friend-identity > span,
+.friend-list-message {
+  color: #aaa6c3;
+}
+
+.friend-avatar {
+  border: 1px solid #625da0;
+  color: #f1efff;
+}
+
+button:focus-visible,
+.server-name-field input:focus-visible,
+.additional-channel-name input:focus-visible,
+.friend-search-field input:focus-visible {
+  outline: 2px solid #aaa5ff;
+  outline-offset: 2px;
+}
+
+@media (max-width: 600px) {
+  .create-server-content {
+    border-radius: 18px;
+    margin: 12px;
+    min-height: calc(100% - 24px);
+    padding: 22px 18px;
+    width: calc(100% - 24px);
+  }
+}

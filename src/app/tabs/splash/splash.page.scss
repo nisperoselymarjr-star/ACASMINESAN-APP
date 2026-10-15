@@ -1,0 +1,135 @@
+.splash-screen {
+    --background: radial-gradient(120% 70% at 50% 28%, #2b2a6b 0%, #17163a 55%, #0f0e26 100%);
+}
+
+.splash {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100%;
+    max-width: 28rem;
+    margin: 0 auto;
+    padding: max(48px, env(safe-area-inset-top)) 24px max(28px, env(safe-area-inset-bottom));
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Logo + name */
+.brand {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    text-align: center;
+}
+
+.logo-tile {
+    width: clamp(104px, 30vw, 132px);
+    height: clamp(104px, 30vw, 132px);
+    border-radius: 30%;
+    background: #ecebff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    /* soft ring + depth, no pseudo-elements */
+    box-shadow:
+        0 0 0 10px rgba(255, 255, 255, 0.06),
+        0 0 0 22px rgba(255, 255, 255, 0.03),
+        0 24px 48px rgba(0, 0, 0, 0.4);
+
+    svg {
+        display: block;
+        width: 78%;
+        height: 78%;
+    }
+
+    .k-body { fill: #5b5fc7; }
+    .k-eye  { fill: #ecebff; } /* same as tile so they read as cutouts */
+}
+
+.wordmark {
+    margin: 0;
+    font-size: clamp(2rem, 9vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+}
+
+.tagline {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.68);
+}
+
+/* Buttons */
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn {
+    width: 100%;
+    height: 54px;
+    border-radius: 16px;
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.12s ease, background-color 0.2s ease;
+
+    &:active { transform: scale(0.98); }
+
+    &:focus-visible {
+        outline: 3px solid #c9caff;
+        outline-offset: 3px;
+    }
+}
+
+.btn-primary {
+    background: #ffffff;
+    border: 0;
+    color: #17163a;
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 1.5px solid rgba(255, 255, 255, 0.35);
+    color: #ffffff;
+}
+
+/* One entrance moment: logo pops in, the rest follows */
+@media (prefers-reduced-motion: no-preference) {
+    .logo-tile {
+        animation: pop-in 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+    }
+
+    .wordmark,
+    .tagline {
+        animation: fade-in 0.6s ease 0.35s both;
+    }
+
+    .actions {
+        animation: fade-in 0.6s ease 0.6s both;
+    }
+}
+
+@keyframes pop-in {
+    from { opacity: 0; transform: scale(0.7); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Tablet / desktop preview */
+@media (min-width: 800px) {
+    .splash { padding-top: 72px; }
+    .logo-tile { width: 160px; height: 160px; }
+}

@@ -1,0 +1,39 @@
+<ion-content [fullscreen]="true" class="signup-screen">
+  <main class="signup-content">
+    <button class="back-button" type="button" aria-label="Back" (click)="goBack()">&larr;</button>
+    <h1>Create Account</h1>
+
+    <div class="verification-choice" role="group" aria-label="Verification method">
+      <button
+        type="button"
+        [class.selected]="verificationMethod === 'phone'"
+        (click)="verificationMethod = 'phone'">
+        Phone
+      </button>
+      <button
+        type="button"
+        [class.selected]="verificationMethod === 'email'"
+        (click)="verificationMethod = 'email'">
+        Email
+      </button>
+    </div>
+
+    <form #contactForm="ngForm" (ngSubmit)="continueToDetails(contactForm)">
+      <label class="signup-field">
+        <span>{{ verificationMethod === 'phone' ? 'Phone number' : 'Email address' }}</span>
+        <input
+          [type]="verificationMethod === 'phone' ? 'tel' : 'email'"
+          [placeholder]="verificationMethod === 'phone' ? 'Enter your phone number' : 'Enter your email address'"
+          [attr.autocomplete]="verificationMethod === 'phone' ? 'tel' : 'email'"
+          [email]="verificationMethod === 'email'"
+          name="contact"
+          [(ngModel)]="contactValue"
+          required />
+      </label>
+
+      <button class="confirm-button" type="submit" [disabled]="contactForm.invalid">
+        Confirm {{ verificationMethod === 'phone' ? 'number' : 'email' }}
+      </button>
+    </form>
+  </main>
+</ion-content>

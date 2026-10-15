@@ -1,0 +1,1334 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+@import "@ionic/angular/css/palettes/dark.system.css";
+
+:root {
+  --komyunity-accent: #635bdb;
+  --komyunity-accent-strong: #5148c8;
+  --komyunity-accent-soft: #eeedff;
+  --komyunity-canvas: #f6f7fb;
+  --komyunity-surface: #ffffff;
+  --komyunity-border: #e5e7ef;
+  --komyunity-text: #282a3a;
+  --komyunity-muted: #777b8c;
+  --komyunity-shadow: 0 16px 42px #25254a12;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body {
+  color: var(--komyunity-text);
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+button {
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+button:not(:disabled):active {
+  transform: translateY(1px);
+}
+
+/* Shared auth styling */
+
+:root .login-screen,
+:root .signup-screen,
+:root .account-details-screen {
+  --background: var(--komyunity-canvas);
+}
+
+:root .login-screen .login-content,
+:root .signup-screen .signup-content,
+:root .account-details-screen .account-details-content {
+  background: var(--komyunity-surface);
+  border: 1px solid var(--komyunity-border);
+  border-radius: 22px;
+  box-shadow: var(--komyunity-shadow);
+  margin: 32px auto;
+  min-height: auto;
+  padding: 30px;
+}
+
+:root .login-screen .login-logo {
+  color: var(--komyunity-text);
+  font-size: 22px;
+  font-weight: 750;
+  height: auto;
+  line-height: 1.3;
+  margin-bottom: 26px;
+  text-align: left;
+  width: 100%;
+}
+
+:root .login-screen .saved-accounts {
+  width: 100%;
+}
+
+:root .login-screen .saved-accounts h2,
+:root .signup-screen h1,
+:root .account-details-screen h1 {
+  color: var(--komyunity-text);
+  font-weight: 700;
+}
+
+:root .login-screen .saved-accounts p,
+:root .login-screen .login-field span,
+:root .signup-screen .signup-field span,
+:root .account-details-screen .details-field span {
+  color: var(--komyunity-muted);
+}
+
+:root .login-screen .saved-account-select,
+:root .signup-screen .signup-field input,
+:root .account-details-screen .details-field input {
+  background: #f4f5f9;
+  border: 1px solid var(--komyunity-border);
+  border-radius: 12px;
+  color: var(--komyunity-text);
+  min-height: 46px;
+}
+
+:root .login-screen.login-screen .login-field input,
+:root .signup-screen.signup-screen .signup-field input,
+:root .account-details-screen.account-details-screen .details-field input {
+  background: #f4f5f9;
+  border: 1px solid var(--komyunity-border);
+  border-radius: 12px;
+  color: var(--komyunity-text);
+  min-height: 46px;
+}
+
+:root .login-screen .saved-account-select:hover {
+  background: var(--komyunity-accent-soft);
+  border-color: #c9c6fb;
+}
+
+:root .login-screen .password-field,
+:root .signup-screen .signup-field,
+:root .account-details-screen .details-field {
+  margin-top: 18px;
+}
+
+:root .login-screen .forgot-password,
+:root .login-screen .saved-account-remove {
+  color: var(--komyunity-accent-strong);
+}
+
+:root .login-screen .continue-button,
+:root .signup-screen .confirm-button,
+:root .account-details-screen .create-account-button {
+  background: var(--komyunity-accent);
+  border: 0;
+  border-radius: 12px;
+  box-shadow: 0 7px 16px #635bdb2b;
+  color: #ffffff;
+  font-weight: 650;
+  height: 46px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+:root .signup-screen .verification-choice {
+  background: #f0f1f7;
+  border-radius: 13px;
+  height: 44px;
+}
+
+:root .signup-screen .verification-choice button {
+  background: transparent;
+  border-radius: 10px;
+  color: var(--komyunity-muted);
+  height: 34px;
+}
+
+:root .signup-screen .verification-choice button.selected {
+  background: #ffffff;
+  box-shadow: 0 2px 8px #25254a14;
+  color: var(--komyunity-accent-strong);
+  font-weight: 650;
+}
+
+:root .account-details-screen .back-button,
+:root .signup-screen .back-button {
+  border-color: var(--komyunity-border);
+  color: var(--komyunity-muted);
+}
+
+/* Komyunity workspace */
+:root .home-screen {
+  --background: #f7f3ef;
+  --komyunity-accent: #a45b78;
+  --komyunity-accent-strong: #81435f;
+  --komyunity-accent-soft: #f3e7ed;
+  --komyunity-canvas: #f7f3ef;
+  --komyunity-surface: #fffdfa;
+  --komyunity-border: #ebe3e9;
+  --komyunity-text: #342d3d;
+  --komyunity-muted: #89818e;
+  --komyunity-shadow: 0 16px 42px #342d3d12;
+  font-family: 'Avenir Next', Avenir, 'Segoe UI', sans-serif;
+}
+
+:root .home-screen .discord-home {
+  background:
+    radial-gradient(ellipse at 82% 8%, #f0e8f1 0, #f7f3ef 42%),
+    #f7f3ef;
+}
+
+:root .home-screen .server-rail {
+  background: #f1e9e5;
+  border-right: 1px solid var(--komyunity-border);
+  flex-basis: 68px;
+  gap: 13px;
+  padding-top: 18px;
+}
+
+:root .home-screen .server {
+  background: #e7ddd9;
+  border: 1px solid #e2d6d2;
+  border-radius: 15px;
+  box-shadow: none;
+  color: #756773;
+  height: 42px;
+  width: 42px;
+}
+
+:root .home-screen .server:hover {
+  background: #e3d4de;
+  border-color: #e2d6d2;
+  border-radius: 12px;
+  color: #514451;
+}
+
+:root .home-screen .server.active {
+  background: var(--komyunity-accent);
+  border-color: var(--komyunity-accent);
+  border-radius: 12px;
+  box-shadow: 0 5px 12px #a45b7830;
+  color: #ffffff;
+}
+
+:root .home-screen .friends-server {
+  background: #b9838c;
+  border-color: #b9838c;
+}
+
+:root .home-screen .add-server {
+  background: #fffdfa;
+  border-color: #e8dfe2;
+  color: var(--komyunity-accent);
+}
+
+:root .home-screen .friends-server.active .speech-bubble,
+:root .home-screen .friends-server.active .speech-bubble::after {
+  background: #ffffff;
+}
+
+:root .home-screen .workspace {
+  background:
+    linear-gradient(135deg, #faf7f3 0%, #f8f4f6 55%, #f5f2f7 100%);
+}
+
+:root .home-screen .workspace-body {
+  background: linear-gradient(135deg, #faf7f3 0%, #f8f4f6 55%, #f5f2f7 100%);
+}
+
+:root .home-screen .workspace-header {
+  background: #fffdfa;
+  border-bottom: 1px solid var(--komyunity-border);
+  color: var(--komyunity-text);
+  flex-basis: 52px;
+  font-size: 14px;
+  font-weight: 700;
+  padding-inline: 18px;
+}
+
+:root .home-screen .invite-trigger,
+:root .home-screen .admin-trigger {
+  border-color: var(--komyunity-border);
+  background: #f8f2f5;
+  border-radius: 999px;
+  color: var(--komyunity-accent-strong);
+  font-size: 11px;
+  font-weight: 650;
+  padding: 7px 12px;
+}
+
+:root .home-screen .invite-trigger:hover,
+:root .home-screen .admin-trigger:hover {
+  background: #f1e3eb;
+}
+
+:root .home-screen .channel-sidebar,
+:root .home-screen .members-sidebar {
+  background: #f3edf3;
+  border-right: 1px solid var(--komyunity-border);
+  flex-basis: 210px;
+  padding-inline: 14px;
+}
+
+:root .home-screen .members-sidebar {
+  background: #faf6f4;
+  border-left: 1px solid #ece3e2;
+  border-right: 0;
+}
+
+:root .home-screen .channel-sidebar-header {
+  background: transparent;
+  border-bottom: 1px solid var(--komyunity-border);
+  color: var(--komyunity-text);
+  font-size: 14px;
+  min-height: 58px;
+  padding: 20px 6px 0;
+}
+
+:root .home-screen .channel-group {
+  padding: 22px 0 0;
+}
+
+:root .home-screen .channel-group h2,
+:root .home-screen .member-group h2 {
+  color: #94879a;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+:root .home-screen .channel-link {
+  border-radius: 11px;
+  color: #726879;
+  font-size: 13px;
+  min-height: 36px;
+}
+
+:root .home-screen .channel-link.selected {
+  background: #e5d9eb;
+  color: #593c63;
+  font-weight: 700;
+}
+
+:root .home-screen .channel-link:hover {
+  background: #e9e0ed;
+  color: #493b53;
+}
+
+:root .home-screen .channel-panel {
+  background: #fffdfa;
+  margin: 14px;
+  padding: 24px;
+  border: 1px solid var(--komyunity-border);
+  border-radius: 18px;
+  box-shadow: 0 8px 24px #4635460a;
+}
+
+:root .home-screen .channel-heading {
+  border-color: var(--komyunity-border);
+  color: var(--komyunity-text);
+  font-size: 14px;
+  font-weight: 700;
+  padding-bottom: 16px;
+}
+
+:root .home-screen .channel-intro h1,
+:root .home-screen .empty-server h1 {
+  color: var(--komyunity-text);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+:root .home-screen .channel-intro p,
+:root .home-screen .empty-server p {
+  color: var(--komyunity-muted);
+  font-size: 13px;
+}
+
+:root .home-screen .intro-icon {
+  background: var(--komyunity-accent-soft);
+  color: var(--komyunity-accent);
+  height: 52px;
+  width: 52px;
+}
+
+:root .home-screen .empty-server button,
+:root .home-screen .admin-action,
+:root .home-screen .friend-action {
+  background: var(--komyunity-accent);
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 650;
+  padding: 10px 16px;
+}
+
+:root .home-screen .profile-bar {
+  background: #fffdfa;
+  border-top: 1px solid #e9dfe3;
+  color: #342d3d;
+  flex-basis: 68px;
+  padding-inline: 14px;
+}
+
+:root .home-screen .profile-avatar {
+  background: #e8d9e6;
+  color: #62465f;
+  flex-basis: 40px;
+  height: 40px;
+  width: 40px;
+}
+
+:root .home-screen .profile-details strong {
+  font-size: 13px;
+}
+
+:root .home-screen .profile-details span {
+  color: #938691;
+  font-size: 11px;
+}
+
+:root .home-screen .profile-details strong {
+  color: #403545;
+}
+
+:root .home-screen .account-menu,
+:root .home-screen .admin-dialog,
+:root .home-screen .member-profile-card {
+  border: 1px solid var(--komyunity-border);
+  border-radius: 20px;
+  box-shadow: 0 18px 50px #342d3d26;
+}
+
+:root .home-screen .account-menu {
+  bottom: 64px;
+  padding: 12px;
+}
+
+:root .home-screen .status-option {
+  border-radius: 8px;
+  min-height: 36px;
+}
+
+:root .home-screen .status-option:hover,
+:root .home-screen .status-option.selected {
+  background: var(--komyunity-accent-soft);
+}
+
+:root .home-screen .admin-field input,
+:root .home-screen .admin-field select {
+  border-color: var(--komyunity-border);
+  border-radius: 9px;
+}
+
+:root .home-screen .admin-sections {
+  border-radius: 10px;
+}
+
+:root .home-screen .admin-sections button,
+:root .home-screen .admin-sections button.selected {
+  border-radius: 8px;
+}
+
+/* Friends, profile, and creation pages */
+:root .add-friends-screen,
+:root .create-server-screen
+{
+  --background: var(--komyunity-canvas);
+}
+
+:root .add-friends-screen .add-friends-content,
+:root .create-server-screen .create-server-content
+{
+  background: var(--komyunity-surface);
+  border: 1px solid var(--komyunity-border);
+  border-radius: 22px;
+  box-shadow: var(--komyunity-shadow);
+  margin: 24px auto;
+  min-height: calc(100% - 48px);
+  padding: 24px;
+}
+
+:root .add-friends-screen .friends-header h1,
+:root .create-server-screen h1
+{
+  color: var(--komyunity-text);
+  font-weight: 700;
+}
+
+:root .add-friends-screen .friends-header p,
+:root .create-server-screen p {
+  color: var(--komyunity-muted);
+}
+
+:root .add-friends-screen .friend-row,
+:root .create-server-screen .server-name-field input {
+  background: #f4f5f9;
+  border: 1px solid var(--komyunity-border);
+  border-radius: 12px;
+}
+
+:root .add-friends-screen .friend-row:hover {
+  background: var(--komyunity-accent-soft);
+}
+
+:root .add-friends-screen .friend-avatar {
+  background: linear-gradient(145deg, #8179f1, var(--komyunity-accent-strong));
+  color: #ffffff;
+}
+
+:root .add-friends-screen .add-friend-button,
+:root .add-friends-screen .confirm-button,
+:root .create-server-screen .create-button {
+  background: var(--komyunity-accent);
+  border-radius: 11px;
+  box-shadow: 0 7px 16px #635bdb24;
+  color: #ffffff;
+  font-weight: 650;
+}
+
+:root .home-screen button:focus-visible,
+:root .login-screen button:focus-visible,
+:root .signup-screen button:focus-visible,
+:root .account-details-screen button:focus-visible,
+:root .add-friends-screen button:focus-visible,
+:root .create-server-screen button:focus-visible {
+  outline-color: var(--komyunity-accent);
+}
+
+@media (max-width: 600px) {
+  :root .login-screen .login-content,
+  :root .signup-screen .signup-content,
+  :root .account-details-screen .account-details-content,
+  :root .add-friends-screen .add-friends-content,
+  :root .create-server-screen .create-server-content {
+    border-radius: 18px;
+    margin: 12px;
+    padding: 22px 18px;
+    width: calc(100% - 24px);
+  }
+
+  :root .home-screen .server-rail {
+    flex-basis: 58px;
+  }
+
+  :root .home-screen .server {
+    height: 38px;
+    width: 38px;
+  }
+
+  :root .home-screen .channel-sidebar {
+    flex-basis: 120px;
+    padding-inline: 8px;
+  }
+
+  :root .home-screen .channel-panel {
+    margin: 8px;
+    padding: 16px 12px;
+  }
+
+  :root .home-screen .members-sidebar {
+    flex-basis: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Indigo workspace theme */
+:root .home-screen {
+  --background: #17162e;
+  --komyunity-accent: #746fe0;
+  --komyunity-accent-strong: #aaa5ff;
+  --komyunity-accent-soft: #302d54;
+  --komyunity-canvas: #17162e;
+  --komyunity-surface: #211f3e;
+  --komyunity-border: #393756;
+  --komyunity-text: #eeecff;
+  --komyunity-muted: #aaa6c3;
+  --komyunity-shadow: 0 16px 42px #0d0c201f;
+}
+
+:root .home-screen .discord-home,
+:root .home-screen .workspace,
+:root .home-screen .workspace-body {
+  background: #17162e;
+}
+
+:root .home-screen .server-rail {
+  background: #191831;
+  border-color: #302e4c;
+}
+
+:root .home-screen .server {
+  background: #292744;
+  border-color: #393756;
+  color: #b1aecb;
+}
+
+:root .home-screen .server:hover {
+  background: #34315a;
+  border-color: #625da0;
+  color: #f4f2ff;
+}
+
+:root .home-screen .server.active,
+:root .home-screen .friends-server {
+  background: #655fc2;
+  border-color: #827cef;
+  color: #ffffff;
+}
+
+:root .home-screen .add-server {
+  background: #211f3e;
+  border-color: #48446f;
+  color: #aaa5ff;
+}
+
+:root .home-screen .add-server:hover {
+  background: #302d54;
+  color: #ffffff;
+}
+
+:root .home-screen .workspace-header {
+  background: #1d1b38;
+  border-color: #302e4c;
+  color: #efedff;
+}
+
+:root .home-screen .invite-trigger,
+:root .home-screen .admin-trigger {
+  background: #292744;
+  border-color: #45416f;
+  color: #c4c0ff;
+}
+
+:root .home-screen .invite-trigger:hover,
+:root .home-screen .admin-trigger:hover {
+  background: #34315a;
+}
+
+:root .home-screen .channel-sidebar,
+:root .home-screen .members-sidebar {
+  background: #1d1b38;
+  border-color: #302e4c;
+}
+
+:root .home-screen .members-sidebar {
+  background: #1a1933;
+}
+
+:root .home-screen .channel-sidebar-header {
+  color: #efedff;
+}
+
+:root .home-screen .channel-sidebar-header,
+:root .home-screen .channel-group h2,
+:root .home-screen .member-group h2 {
+  border-color: #34314f;
+}
+
+:root .home-screen .channel-group h2,
+:root .home-screen .member-group h2,
+:root .home-screen .members-header span,
+:root .home-screen .member-group h2 span {
+  color: #9e9ab9;
+}
+
+:root .home-screen .channel-link {
+  color: #b7b3d0;
+}
+
+:root .home-screen .channel-link:hover {
+  background: #292744;
+  color: #efedff;
+}
+
+:root .home-screen .channel-link.selected {
+  background: #34315e;
+  color: #d5d2ff;
+}
+
+:root .home-screen .channel-icon,
+:root .home-screen .channel-heading-icon {
+  color: #aaa5ff;
+}
+
+:root .home-screen .channel-panel {
+  background: #1b1a35;
+  border-color: #34314f;
+  box-shadow: 0 8px 24px #0d0c201f;
+}
+
+:root .home-screen .channel-heading {
+  border-color: #34314f;
+  color: #eeecff;
+}
+
+:root .home-screen .chat-message {
+  background: #24223f;
+  border-color: #383554;
+}
+
+:root .home-screen .chat-message-meta strong,
+:root .home-screen .chat-message p {
+  color: #e7e4fb;
+}
+
+:root .home-screen .chat-message-meta time {
+  color: #9e9ab9;
+}
+
+:root .home-screen .message-composer {
+  background: #22203d;
+  border-color: #403d62;
+}
+
+:root .home-screen .message-composer textarea {
+  color: #efedff;
+}
+
+:root .home-screen .message-composer:focus-within {
+  border-color: #817bed;
+  box-shadow: 0 0 0 3px #817bed24;
+}
+
+:root .home-screen .message-composer button,
+:root .home-screen .empty-server button,
+:root .home-screen .admin-action,
+:root .home-screen .friend-action {
+  background: #655fc2;
+}
+
+:root .home-screen .message-composer button:hover:not(:disabled),
+:root .home-screen .empty-server button:hover,
+:root .home-screen .admin-action:hover:not(:disabled),
+:root .home-screen .friend-action:hover:not(:disabled) {
+  background: #7771dc;
+}
+
+:root .home-screen .members-header {
+  border-color: #34314f;
+  color: #d4d1ec;
+}
+
+:root .home-screen .member-row {
+  color: #d5d2e9;
+}
+
+:root .home-screen .member-row:hover,
+:root .home-screen .member-row[aria-expanded='true'] {
+  background: #292744;
+}
+
+:root .home-screen .member-avatar,
+:root .home-screen .profile-avatar {
+  background: #34315e;
+  color: #d6d3ff;
+}
+
+:root .home-screen .member-name {
+  color: #e3e1f6;
+}
+
+:root .home-screen .profile-bar {
+  background: #1d1b38;
+  border-color: #302e4c;
+  color: #efedff;
+}
+
+:root .home-screen .profile-status-dot {
+  border-color: #1d1b38;
+}
+
+:root .home-screen .profile-details strong {
+  color: #efedff;
+}
+
+:root .home-screen .profile-details span,
+:root .home-screen .profile-arrow {
+  color: #aca8c8;
+}
+
+:root .home-screen .account-menu,
+:root .home-screen .admin-dialog,
+:root .home-screen .member-profile-card {
+  background: #211f3e;
+  border-color: #403d62;
+  color: #e9e7fc;
+}
+
+:root .home-screen .account-menu h2,
+:root .home-screen .member-profile-eyebrow {
+  color: #aaa5c8;
+}
+
+:root .home-screen .status-option,
+:root .home-screen .admin-dialog h2,
+:root .home-screen .member-profile-heading h2 {
+  color: #eeecff;
+}
+
+:root .home-screen .status-option:hover,
+:root .home-screen .status-option.selected {
+  background: #302d54;
+}
+
+:root .home-screen .admin-field span,
+:root .home-screen .admin-dialog .account-name,
+:root .home-screen .invite-code-row,
+:root .home-screen .role-assignments h3,
+:root .home-screen .admin-help {
+  color: #c0bdd7;
+}
+
+:root .home-screen .admin-field input,
+:root .home-screen .admin-field select,
+:root .home-screen .role-assignment select,
+:root .home-screen .invite-code-row code {
+  background: #292744;
+  border-color: #45416f;
+  color: #eeecff;
+}
+
+:root .home-screen .admin-sections {
+  background: #191831;
+}
+
+:root .home-screen .admin-sections button {
+  color: #b2aecb;
+}
+
+:root .home-screen .admin-sections button.selected {
+  background: #34315e;
+  color: #dfdcff;
+}
+
+:root .home-screen button:focus-visible,
+:root .home-screen .channel-link:focus-visible {
+  outline-color: #aaa5ff;
+}
+
+:root .home-profile-bar {
+  background: #1d1b38;
+  border-top: 1px solid #302e4c;
+  color: #efedff;
+}
+
+:root .home-profile-bar .profile-avatar {
+  background: #34315e;
+  color: #d6d3ff;
+}
+
+:root .home-profile-bar .profile-status-dot {
+  border-color: #1d1b38;
+}
+
+:root .home-profile-bar .profile-details strong {
+  color: #efedff;
+}
+
+:root .home-profile-bar .profile-details span,
+:root .home-profile-bar .profile-arrow {
+  color: #aca8c8;
+}
+
+:root .home-profile-bar .account-menu {
+  background: #211f3e;
+  border-color: #403d62;
+  color: #e9e7fc;
+}
+
+:root .home-profile-bar .account-menu h2 {
+  color: #aaa5c8;
+}
+
+:root .home-profile-bar .status-option {
+  color: #eeecff;
+}
+
+:root .home-profile-bar .status-option:hover,
+:root .home-profile-bar .status-option.selected {
+  background: #302d54;
+}
+
+/* Add-friends workspace palette */
+:root .add-friends-screen {
+  --background: #17162e;
+  --komyunity-accent: #746fe0;
+  --komyunity-accent-strong: #aaa5ff;
+  --komyunity-accent-soft: #302d54;
+  --komyunity-canvas: #17162e;
+  --komyunity-surface: #211f3e;
+  --komyunity-border: #393756;
+  --komyunity-text: #eeecff;
+  --komyunity-muted: #aaa6c3;
+  --komyunity-shadow: 0 16px 42px #0d0c201f;
+  background: #17162e;
+  color: #eeecff;
+}
+
+:root .add-friends-screen .add-friends-content {
+  background: #1b1a35;
+  border-color: #34314f;
+  border-radius: 18px;
+  box-shadow: 0 14px 36px #0d0c202e;
+  color: #eeecff;
+}
+
+:root .add-friends-screen .back-button {
+  align-self: flex-start;
+  background: #252341;
+  border: 1px solid #403d62;
+  border-radius: 9px;
+  color: #c5c1ff;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 650;
+  min-height: 36px;
+  padding: 0 12px;
+}
+
+:root .add-friends-screen .back-button:hover {
+  background: #302d54;
+  border-color: #625da0;
+}
+
+:root .add-friends-screen .friends-header h1 {
+  color: #f1efff;
+  font-size: 25px;
+  font-weight: 750;
+  letter-spacing: -0.025em;
+  margin-top: 30px;
+}
+
+:root .add-friends-screen .friends-header p {
+  color: #aaa6c3;
+}
+
+:root .add-friends-screen .friend-row {
+  background: #24223f;
+  border: 1px solid #393756;
+  border-radius: 13px;
+  color: #eeecff;
+  cursor: pointer;
+  min-height: 62px;
+  transition: background-color 140ms ease, border-color 140ms ease, transform 140ms ease;
+}
+
+:root .add-friends-screen .friend-row:hover {
+  background: #2b294b;
+  border-color: #605b99;
+  transform: translateY(-1px);
+}
+
+:root .add-friends-screen .friend-avatar {
+  background: linear-gradient(145deg, #716bd0, #514d9e);
+  border: 1px solid #8a84f2;
+  color: #ffffff;
+}
+
+:root .add-friends-screen .friend-details strong {
+  color: #f0eeff;
+}
+
+:root .add-friends-screen .friend-details span,
+:root .add-friends-screen .friend-arrow {
+  color: #aaa6c3;
+}
+
+:root .add-friends-screen .chat-header {
+  border-color: #393756;
+}
+
+:root .add-friends-screen .chat-messages {
+  background: #18172f;
+  border: 1px solid #302e4c;
+  border-radius: 14px;
+  margin-top: 15px;
+  padding: 16px;
+}
+
+:root .add-friends-screen .chat-empty {
+  color: #aaa6c3;
+}
+
+:root .add-friends-screen .message-bubble {
+  background: #292744;
+  border: 1px solid #403d62;
+  color: #e5e2fa;
+}
+
+:root .add-friends-screen .message-bubble.message-mine {
+  background: #5f5ab5;
+  border-color: #7973dd;
+  color: #ffffff;
+}
+
+:root .add-friends-screen .message-composer {
+  border-color: #393756;
+}
+
+:root .add-friends-screen .message-composer input,
+:root .add-friends-screen .add-friend-form input {
+  background: #252341;
+  border: 1px solid #403d62;
+  color: #f0eeff;
+  min-height: 42px;
+}
+
+:root .add-friends-screen .message-composer input::placeholder,
+:root .add-friends-screen .add-friend-form input::placeholder {
+  color: #9692b2;
+}
+
+:root .add-friends-screen .message-composer input:focus,
+:root .add-friends-screen .add-friend-form input:focus {
+  border-color: #817bed;
+  box-shadow: 0 0 0 3px #817bed24;
+  outline: 0;
+}
+
+:root .add-friends-screen .add-friend-area {
+  border-top: 1px solid #34314f;
+  margin-top: auto;
+  padding-top: 18px;
+}
+
+:root .add-friends-screen .add-friend-button,
+:root .add-friends-screen .confirm-button {
+  background: #655fc2;
+  border: 1px solid #7973dd;
+  border-radius: 10px;
+  box-shadow: 0 5px 14px #11102e30;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 700;
+  min-height: 42px;
+}
+
+:root .add-friends-screen .add-friend-button:hover,
+:root .add-friends-screen .confirm-button:hover:not(:disabled) {
+  background: #7771dc;
+}
+
+:root .add-friends-screen .confirm-button:disabled {
+  background: #343250;
+  border-color: #403d5b;
+  box-shadow: none;
+  color: #8986a7;
+  cursor: not-allowed;
+}
+
+:root .add-friends-screen button:focus-visible,
+:root .add-friends-screen input:focus-visible {
+  outline-color: #aaa5ff;
+}
+
+@media (max-width: 600px) {
+  :root .add-friends-screen .add-friends-content {
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0;
+    min-height: 100%;
+    padding: 16px;
+    width: 100%;
+  }
+}
+
+/* Extend the indigo workspace palette to login and server setup. */
+:root .login-screen,
+:root .create-server-screen {
+  --background: #17162e;
+  --komyunity-accent: #746fe0;
+  --komyunity-accent-strong: #aaa5ff;
+  --komyunity-accent-soft: #302d54;
+  --komyunity-canvas: #17162e;
+  --komyunity-surface: #211f3e;
+  --komyunity-border: #393756;
+  --komyunity-text: #eeecff;
+  --komyunity-muted: #aaa6c3;
+  --komyunity-shadow: 0 16px 42px #0d0c201f;
+}
+
+:root .login-screen,
+:root .create-server-screen {
+  background: #17162e;
+  color: #eeecff;
+}
+
+:root .login-screen .login-content,
+:root .create-server-screen .create-server-content {
+  background: linear-gradient(155deg, #211f3e, #1b1a35 72%);
+  border-color: #393756;
+  box-shadow: 0 18px 48px #0d0c203d;
+  color: #eeecff;
+}
+
+:root .login-screen .login-logo {
+  color: #f4f2ff;
+}
+
+:root .login-screen .saved-accounts {
+  background: #191831;
+  border: 1px solid #34314f;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+:root .login-screen .saved-accounts h2 {
+  color: #efedff;
+}
+
+:root .login-screen .saved-accounts p,
+:root .login-screen .login-field span {
+  color: #b0acc9;
+}
+
+:root .login-screen .saved-account-select,
+:root .login-screen.login-screen .login-field input {
+  background: #292744;
+  border: 1px solid #45416f;
+  border-radius: 11px;
+  color: #f1efff;
+  min-height: 44px;
+}
+
+:root .login-screen .saved-account-select:hover {
+  background: #302d54;
+  border-color: #625da0;
+}
+
+:root .login-screen .saved-account-remove {
+  border: 1px solid #403d62;
+  border-radius: 9px;
+  color: #b7b2d4;
+}
+
+:root .login-screen .saved-account-remove:hover {
+  background: #302d54;
+  color: #ffffff;
+}
+
+:root .login-screen .login-field input::placeholder,
+:root .create-server-screen input::placeholder {
+  color: #9692b2;
+}
+
+:root .login-screen .forgot-password {
+  color: #b7b2ff;
+}
+
+:root .login-screen .forgot-password:hover {
+  color: #d8d5ff;
+  text-decoration: underline;
+}
+
+:root .login-screen .login-error {
+  background: #482a43;
+  border: 1px solid #73435e;
+  border-radius: 10px;
+  color: #ffd5e0;
+  padding: 10px 12px;
+}
+
+:root .login-screen .continue-button,
+:root .create-server-screen .create-button {
+  background: #655fc2;
+  border: 1px solid #7973dd;
+  border-radius: 11px;
+  box-shadow: 0 7px 17px #11102e40;
+  color: #ffffff;
+  font-weight: 700;
+  text-align: center;
+}
+
+:root .login-screen .continue-button:hover:not(:disabled),
+:root .create-server-screen .create-button:hover:not(:disabled) {
+  background: #7771dc;
+}
+
+:root .login-screen .continue-button:disabled,
+:root .create-server-screen .create-button:disabled {
+  background: #343250;
+  border-color: #403d5b;
+  box-shadow: none;
+  color: #8986a7;
+}
+
+:root .create-server-screen .back-button {
+  background: #252341;
+  border: 1px solid #403d62;
+  border-radius: 9px;
+  color: #c5c1ff;
+  min-height: 36px;
+  padding: 0 12px;
+}
+
+:root .create-server-screen .back-button:hover {
+  background: #302d54;
+  border-color: #625da0;
+}
+
+:root .create-server-screen h1 {
+  color: #f1efff;
+}
+
+:root .create-server-screen p {
+  color: #aaa6c3;
+}
+
+:root .create-server-screen .step-indicator {
+  color: #aaa5ff;
+}
+
+:root .create-server-screen .template-option,
+:root .create-server-screen .server-preview,
+:root .create-server-screen .invite-friends-button,
+:root .create-server-screen .friend-option {
+  background: #24223f;
+  border-color: #393756;
+  color: #eeecff;
+}
+
+:root .create-server-screen .template-option:hover,
+:root .create-server-screen .invite-friends-button:hover,
+:root .create-server-screen .friend-option:hover {
+  background: #2b294b;
+  border-color: #625da0;
+}
+
+:root .create-server-screen .template-option.selected {
+  background: #302d54;
+  border-color: #8a84f2;
+  box-shadow: 0 0 0 1px #8a84f2, 0 6px 16px #0d0c202e;
+}
+
+:root .create-server-screen .template-copy strong,
+:root .create-server-screen .accent-picker legend,
+:root .create-server-screen .starter-channels legend,
+:root .create-server-screen .additional-channels-header h2,
+:root .create-server-screen .invite-friends-copy strong,
+:root .create-server-screen .friend-identity strong {
+  color: #f1efff;
+}
+
+:root .create-server-screen .template-copy > span,
+:root .create-server-screen .channel-note,
+:root .create-server-screen .channel-option,
+:root .create-server-screen .invite-friends-copy > span,
+:root .create-server-screen .invite-friends-arrow,
+:root .create-server-screen .friend-identity > span,
+:root .create-server-screen .friend-list-message {
+  color: #b4b0ce;
+}
+
+:root .create-server-screen .server-name-field span,
+:root .create-server-screen .friend-search-field > span {
+  color: #c0bdd7;
+}
+
+:root .create-server-screen .server-name-field input,
+:root .create-server-screen .additional-channel-name input,
+:root .create-server-screen .friend-search-field input {
+  background: #252341;
+  border: 1px solid #403d62;
+  border-radius: 11px;
+  color: #f0eeff;
+  min-height: 44px;
+}
+
+:root .create-server-screen .server-name-field input:focus,
+:root .create-server-screen .additional-channel-name input:focus,
+:root .create-server-screen .friend-search-field input:focus {
+  border-color: #817bed;
+  box-shadow: 0 0 0 3px #817bed24;
+  outline: 0;
+}
+
+:root .create-server-screen .server-preview {
+  color: #f0eeff;
+}
+
+:root .create-server-screen .accent-swatch {
+  border-color: #211f3e;
+  box-shadow: 0 0 0 1px #59557b;
+}
+
+:root .create-server-screen .accent-swatch.selected {
+  box-shadow: 0 0 0 2px #aaa5ff, 0 0 0 4px #211f3e;
+}
+
+:root .create-server-screen .starter-channels {
+  background: #1a1933;
+  border-color: #393756;
+}
+
+:root .create-server-screen .channel-option input,
+:root .create-server-screen .friend-option > input {
+  accent-color: #8a84f2;
+}
+
+:root .create-server-screen .channel-option:hover,
+:root .create-server-screen .add-channel-button:hover {
+  background: #292744;
+}
+
+:root .create-server-screen .channel-separator {
+  border-color: #393756;
+}
+
+:root .create-server-screen .add-channel-button {
+  color: #b7b2ff;
+}
+
+:root .create-server-screen .remove-channel-button {
+  color: #f0a2bd;
+}
+
+:root .login-screen button:focus-visible,
+:root .login-screen input:focus-visible,
+:root .create-server-screen button:focus-visible,
+:root .create-server-screen input:focus-visible {
+  outline-color: #aaa5ff;
+}

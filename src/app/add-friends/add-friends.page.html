@@ -1,0 +1,70 @@
+<ion-content [fullscreen]="true" class="add-friends-screen">
+  <main class="add-friends-content">
+    @if (activeFriend; as friend) {
+      <button class="back-button" type="button" (click)="closeChat()">Back to friends</button>
+      <header class="chat-header">
+        <span class="friend-avatar" aria-hidden="true">{{ friend.initial }}</span>
+        <span class="friend-details">
+          <strong>{{ friend.name }}</strong>
+          <span>{{ friend.status }}</span>
+        </span>
+      </header>
+
+      <section class="chat-messages" aria-label="Conversation" aria-live="polite">
+        @for (message of messages[friend.id] ?? []; track $index) {
+          <p class="message-bubble" [class.message-mine]="message.sender === 'you'">{{ message.text }}</p>
+        } @empty {
+          <p class="chat-empty">Start a conversation with {{ friend.name }}.</p>
+        }
+      </section>
+
+      <form class="message-composer" (ngSubmit)="sendMessage()">
+        <input
+          type="text"
+          name="message"
+          [(ngModel)]="messageText"
+          placeholder="Write a message..."
+          autocomplete="off"
+          aria-label="Message"
+          required />
+        <button class="confirm-button" type="submit" [disabled]="!messageText.trim()">Send</button>
+      </form>
+    } @else {
+      <button class="back-button" type="button" (click)="goBack()">Back</button>
+      <header class="friends-header">
+        <h1>Friends</h1>
+        <p>People you connect with will appear here.</p>
+      </header>
+
+      <section class="friends-list" aria-label="Friends list">
+        @for (friend of friends; track friend.id) {
+          <button class="friend-row" type="button" (click)="openChat(friend)" [attr.aria-label]="'Open conversation with ' + friend.name">
+            <span class="friend-avatar" aria-hidden="true">{{ friend.initial }}</span>
+            <span class="friend-details">
+              <strong>{{ friend.name }}</strong>
+              <span>{{ friend.status }}</span>
+            </span>
+            <span class="friend-arrow" aria-hidden="true">&gt;</span>
+          </button>
+        }
+      </section>
+
+      <section class="add-friend-area" aria-label="Add a friend">
+        @if (isAddingFriend) {
+          <div class="add-friend-form">
+            <input
+              type="text"
+              [(ngModel)]="friendName"
+              placeholder="Enter a username"
+              autocomplete="off"
+              aria-label="Username"
+              (keyup.enter)="addFriend()" />
+            <button class="confirm-button" type="button" [disabled]="!friendName.trim()" (click)="addFriend()">Add</button>
+          </div>
+        } @else {
+          <button class="add-friend-button" type="button" (click)="toggleAddFriend()">Add friends</button>
+        }
+      </section>
+    }
+  </main>
+</ion-content>
