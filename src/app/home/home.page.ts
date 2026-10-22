@@ -38,7 +38,7 @@ export class HomePage implements OnDestroy {
   inviteStatus = '';
   serverMenuOpen = false;
   channelSettingsOpen: string | null = null;
-  deleteConfirmation: { type: 'server'; name: string } | null = null;
+  deleteConfirmation: { type: 'server' | 'channel'; name: string } | null = null;
   channelBeingEdited: { currentName: string; name: string } | null = null;
   editChannelError = '';
   categoryDialogOpen = false;
@@ -65,6 +65,7 @@ export class HomePage implements OnDestroy {
   confirmAccountRemoval = false;
 
   private readonly channelMessages = new Map<string, Array<{ author: string; content: string; sentAt: Date }>>();
+  private readonly channelMemberships = new Map<string, Set<string>>();
   private readonly serverStore = inject(ServerStoreService);
   private readonly router = inject(Router);
   private readonly accountProfiles = inject(AccountProfileStoreService);
@@ -85,6 +86,7 @@ export class HomePage implements OnDestroy {
     this.joinedServers = this.serverStore.servers;
     const activeServer = this.serverStore.activeServer;
     if (this.activeServer !== activeServer) {
+      this.removeCurrentMemberFromVoiceChannel();
       this.stopLocalMedia();
       this.activeServer = activeServer;
       this.activeChannel = '';
@@ -118,6 +120,7 @@ export class HomePage implements OnDestroy {
   }
 
   selectServer(server: Server): void {
+    this.removeCurrentMemberFromVoiceChannel();
     this.stopLocalMedia();
     this.serverStore.activeServer = server;
     this.activeServer = server;
@@ -139,6 +142,15 @@ export class HomePage implements OnDestroy {
 
   selectChannel(channel: string): void {
     this.channelSettingsOpen = null;
+    const previousChannel = this.activeChannel;
+    const previousServer = this.activeServer;
+    if (channel !== previousChannel
+      && this.voiceJoined
+      && previousServer
+      && previousChannel
+      && this.activeChannelType === 'voice') {
+      this.removeChannelMember(previousServer, previousChannel, CURRENT_MEMBER_ID);
+    }
     if (this.activeChannel !== channel) {
       this.stopLocalMedia();
       this.voiceJoined = false;
@@ -147,6 +159,9 @@ export class HomePage implements OnDestroy {
       this.voiceChatOpen = false;
     }
     this.activeChannel = channel;
+    if (this.activeServer && this.activeChannelType !== 'voice') {
+      this.addChannelMember(this.activeServer, channel, CURRENT_MEMBER_ID);
+    }
     this.messageDraft = '';
     if (this.activeChannelType === 'voice' && !this.voiceJoined) {
       this.microphoneEnabled = true;
@@ -161,6 +176,14 @@ export class HomePage implements OnDestroy {
     }
     this.serverMenuOpen = false;
     this.deleteConfirmation = { type: 'server', name: this.activeServer.name };
+  }
+
+  requestDeleteChannel(channel: string): void {
+    if (!this.canManageServer || !this.activeServer) {
+      return;
+    }
+    this.channelSettingsOpen = null;
+    this.deleteConfirmation = { type: 'channel', name: channel };
   }
 
   requestEditChannel(channel: string): void {
@@ -192,6 +215,11 @@ export class HomePage implements OnDestroy {
       this.channelMessages.set(updatedKey, messages);
       this.channelMessages.delete(previousKey);
     }
+    const joinedMembers = this.channelMemberships.get(previousKey);
+    if (joinedMembers && previousKey !== updatedKey) {
+      this.channelMemberships.set(updatedKey, joinedMembers);
+      this.channelMemberships.delete(previousKey);
+    }
     if (this.activeChannel === edit.currentName) {
       this.activeChannel = newName;
     }
@@ -214,23 +242,76 @@ export class HomePage implements OnDestroy {
       return;
     }
 
-    if (!this.serverStore.deleteServer(server, CURRENT_MEMBER_ID)) {
+    if (confirmation.type === 'server') {
+      if (!this.serverStore.deleteServer(server, CURRENT_MEMBER_ID)) {
+        this.deleteConfirmation = null;
+        return;
+      }
+      this.stopLocalMedia();
+      this.joinedServers = this.serverStore.servers;
+      this.activeServer = this.serverStore.activeServer;
+      this.activeChannel = '';
+      this.mobileChannelOpen = false;
+      this.voiceJoined = false;
+      this.voiceChatOpen = false;
+      this.deafened = false;
       this.deleteConfirmation = null;
       return;
     }
-    this.stopLocalMedia();
-    this.joinedServers = this.serverStore.servers;
-    this.activeServer = this.serverStore.activeServer;
-    this.activeChannel = '';
-    this.mobileChannelOpen = false;
-    this.voiceJoined = false;
-    this.voiceChatOpen = false;
-    this.deafened = false;
+
+    if (!this.serverStore.deleteChannel(server, confirmation.name, CURRENT_MEMBER_ID)) {
+      this.deleteConfirmation = null;
+      return;
+    }
+    this.channelMessages.delete(JSON.stringify([server.name, confirmation.name]));
+    this.channelMemberships.delete(JSON.stringify([server.name, confirmation.name]));
+    if (this.activeChannel === confirmation.name) {
+      this.stopLocalMedia();
+      this.activeChannel = '';
+      this.voiceJoined = false;
+      this.voiceChatOpen = false;
+      this.deafened = false;
+      this.mobileChannelOpen = false;
+    }
     this.deleteConfirmation = null;
   }
 
   get activeChannelMessages(): Array<{ author: string; content: string; sentAt: Date }> {
     return this.channelMessages.get(this.activeChannelKey) ?? [];
+  }
+
+  getChannelMembers(channel: string): ServerMember[] {
+    const server = this.activeServer;
+    if (!server) {
+      return [];
+    }
+    const memberIds = this.channelMemberships.get(JSON.stringify([server.name, channel]));
+    return server.members.filter((member) => memberIds?.has(member.id));
+  }
+
+  private addChannelMember(server: Server, channel: string, memberId: string): void {
+    const channelKey = JSON.stringify([server.name, channel]);
+    const members = this.channelMemberships.get(channelKey) ?? new Set<string>();
+    members.add(memberId);
+    this.channelMemberships.set(channelKey, members);
+  }
+
+  private removeChannelMember(server: Server, channel: string, memberId: string): void {
+    this.channelMemberships.get(JSON.stringify([server.name, channel]))?.delete(memberId);
+  }
+
+  private removeCurrentMemberFromVoiceChannel(): void {
+    if (this.voiceJoined && this.activeServer && this.activeChannel && this.activeChannelType === 'voice') {
+      this.removeChannelMember(this.activeServer, this.activeChannel, CURRENT_MEMBER_ID);
+    }
+  }
+
+  isMemberTalking(member: ServerMember, channel: string): boolean {
+    return member.id === CURRENT_MEMBER_ID
+      && this.activeChannel === channel
+      && this.activeChannelType === 'voice'
+      && this.voiceJoined
+      && this.microphoneEnabled;
   }
 
   sendMessage(): void {
@@ -251,6 +332,7 @@ export class HomePage implements OnDestroy {
 
   toggleVoiceConnection(): void {
     if (this.voiceJoined) {
+      this.removeCurrentMemberFromVoiceChannel();
       this.voiceJoined = false;
       this.voiceChatOpen = false;
       this.deafened = false;
@@ -259,6 +341,9 @@ export class HomePage implements OnDestroy {
     }
     this.voiceMediaError = '';
     this.voiceJoined = true;
+    if (this.activeServer && this.activeChannel) {
+      this.addChannelMember(this.activeServer, this.activeChannel, CURRENT_MEMBER_ID);
+    }
   }
 
   toggleVoiceChat(): void {
@@ -516,7 +601,10 @@ export class HomePage implements OnDestroy {
 
   get memberGroups(): Array<{ name: string; members: ServerMember[] }> {
     const groups = new Map<string, ServerMember[]>();
-    for (const member of this.activeServer?.members ?? []) {
+    const members = this.activeChannel
+      ? this.getChannelMembers(this.activeChannel)
+      : this.activeServer?.members ?? [];
+    for (const member of members) {
       const groupName = member.authority === 'owner'
         ? 'Owner'
         : member.authority === 'admin'
@@ -527,6 +615,10 @@ export class HomePage implements OnDestroy {
       groups.set(groupName, groupMembers);
     }
     return Array.from(groups, ([name, members]) => ({ name, members }));
+  }
+
+  get visibleMemberCount(): number {
+    return this.memberGroups.reduce((count, group) => count + group.members.length, 0);
   }
 
   getMemberStatusLabel(status?: MemberStatus): string {

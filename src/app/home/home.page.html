@@ -96,11 +96,41 @@
                           type="button"
                           role="menuitem"
                           (click)="requestEditChannel(channel.name)">Edit channel</button>
+                        <button
+                          class="channel-delete-action"
+                          type="button"
+                          role="menuitem"
+                          (click)="requestDeleteChannel(channel.name)">Delete channel</button>
                       </div>
                     }
                   </div>
                 }
               </div>
+              @if (getChannelMembers(channel.name); as joinedMembers) {
+                @if (joinedMembers.length) {
+                  <div class="channel-joined-members" [attr.aria-label]="'Members joined in ' + channel.name">
+                    @for (member of joinedMembers; track member.id) {
+                      <button
+                        class="channel-joined-member"
+                        type="button"
+                        [class.is-speaking]="isMemberTalking(member, channel.name)"
+                        [attr.aria-label]="'Open profile for ' + member.name + (isMemberTalking(member, channel.name) ? ', speaking' : '')"
+                        [attr.title]="member.name + (isMemberTalking(member, channel.name) ? ' is speaking' : '')"
+                        [attr.aria-expanded]="selectedMember?.id === member.id"
+                        (click)="openMemberProfile(member, $event)">
+                        <span class="channel-joined-avatar" aria-hidden="true">
+                          @if (member.id === currentMemberId && profileImage) {
+                            <img [src]="profileImage" alt="" />
+                          } @else {
+                            {{ member.name.charAt(0).toUpperCase() }}
+                          }
+                        </span>
+                        <span class="channel-joined-name">{{ member.name }}</span>
+                      </button>
+                    }
+                  </div>
+                }
+              }
             }
           </div>
           }
@@ -139,7 +169,7 @@
                       <p class="voice-media-error" role="alert">{{ voiceMediaError }}</p>
                     }
                     <section class="voice-room-members" aria-label="Members in this lobby">
-                      @for (member of server.members; track member.id) {
+                      @for (member of getChannelMembers(activeChannel); track member.id) {
                         <article
                           class="voice-room-member"
                           [class.has-live-media]="member.id === currentMemberId && (cameraStream || screenStream)"
@@ -156,16 +186,33 @@
                             </div>
                           }
                           @if (!(member.id === currentMemberId && cameraStream && !screenStream)) {
-                            <span class="voice-room-member-avatar">
-                              @if (member.id === currentMemberId && profileImage) {
-                                <img [src]="profileImage" [alt]="member.name" />
-                              } @else {
-                                <span aria-hidden="true">{{ member.name.charAt(0).toUpperCase() }}</span>
-                              }
-                              <span class="voice-room-member-status" aria-hidden="true"></span>
-                            </span>
+                            <button
+                              class="voice-room-profile"
+                              [class.is-speaking]="isMemberTalking(member, activeChannel)"
+                              type="button"
+                              [attr.aria-label]="'Open profile for ' + member.name + (isMemberTalking(member, activeChannel) ? ', speaking' : '')"
+                              [attr.aria-expanded]="selectedMember?.id === member.id"
+                              (click)="openMemberProfile(member, $event)">
+                              <span class="voice-room-member-avatar">
+                                @if (member.id === currentMemberId && profileImage) {
+                                  <img [src]="profileImage" alt="" />
+                                } @else {
+                                  <span aria-hidden="true">{{ member.name.charAt(0).toUpperCase() }}</span>
+                                }
+                                <span class="voice-room-member-status" aria-hidden="true"></span>
+                              </span>
+                              <span class="voice-room-member-name">{{ member.name }}@if (member.id === server.ownerId) { <small>Admin</small> }@if (member.id === currentMemberId) { <small>You</small> }</span>
+                            </button>
+                          } @else {
+                            <button
+                              class="voice-room-profile voice-room-profile-compact"
+                              type="button"
+                              [attr.aria-label]="'Open profile for ' + member.name"
+                              [attr.aria-expanded]="selectedMember?.id === member.id"
+                              (click)="openMemberProfile(member, $event)">
+                              <span class="voice-room-member-name">{{ member.name }}@if (member.id === server.ownerId) { <small>Admin</small> }@if (member.id === currentMemberId) { <small>You</small> }</span>
+                            </button>
                           }
-                          <span class="voice-room-member-name">{{ member.name }}@if (member.id === server.ownerId) { <small>Admin</small> }@if (member.id === currentMemberId) { <small>You</small> }</span>
                         </article>
                       }
                     </section>
@@ -285,8 +332,8 @@
             }
           </section>
         }
-        <aside class="members-sidebar" aria-label="Server members">
-          <div class="members-header">Members <span>{{ server.members.length }}</span></div>
+        <aside class="members-sidebar" [attr.aria-label]="activeChannel ? 'Members in ' + activeChannel : 'Server members'">
+          <div class="members-header">{{ activeChannel ? 'Channel members' : 'Members' }} <span>{{ visibleMemberCount }}</span></div>
           @for (group of memberGroups; track group.name) {
             <section class="member-group">
               <h2>{{ group.name }} <span>{{ group.members.length }}</span></h2>
@@ -597,8 +644,12 @@
         <div class="admin-backdrop" (click)="deleteConfirmation = null">
           <section class="admin-dialog delete-confirm-dialog" role="alertdialog" aria-modal="true" aria-labelledby="delete-confirm-title" (click)="$event.stopPropagation()">
             <button class="admin-close" type="button" aria-label="Cancel deletion" (click)="deleteConfirmation = null">×</button>
-            <h2 id="delete-confirm-title">Delete server?</h2>
-            <p>This will permanently remove <strong>{{ confirmation.name }}</strong> and all of its channels.</p>
+            <h2 id="delete-confirm-title">Delete {{ confirmation.type === 'server' ? 'server' : 'channel' }}?</h2>
+            @if (confirmation.type === 'server') {
+              <p>This will permanently remove <strong>{{ confirmation.name }}</strong> and all of its channels.</p>
+            } @else {
+              <p>This will permanently remove only the channel <strong>{{ confirmation.name }}</strong>. The server will remain.</p>
+            }
             <div class="delete-confirm-actions">
               <button class="delete-cancel-action" type="button" (click)="deleteConfirmation = null">Cancel</button>
               <button class="delete-confirm-action" type="button" (click)="confirmDelete()">Delete</button>
