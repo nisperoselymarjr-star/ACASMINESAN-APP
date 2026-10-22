@@ -21,6 +21,10 @@ export class LoginPage {
   @ViewChild('passwordInput') private passwordInput?: ElementRef<HTMLInputElement>;
   savedAccounts = this.accountProfiles.getSavedAccounts();
 
+  goBack(): void {
+    this.router.navigateByUrl('/tabs/splash');
+  }
+
   async logIn(form: NgForm): Promise<void> {
     if (form.invalid || this.isSubmitting) {
       return;

@@ -233,6 +233,24 @@ export class ServerStoreService {
     return true;
   }
 
+  renameChannel(server: Server, currentName: string, newName: string, actorId: string): boolean {
+    if (!this.servers.includes(server) || !this.canManageServer(server, actorId)) {
+      return false;
+    }
+    const normalizedName = newName.trim();
+    const channel = server.categories
+      .flatMap((category) => category.channels)
+      .find((item) => item.name === currentName);
+    if (!channel || !normalizedName || server.categories.some((category) =>
+      category.channels.some((item) =>
+        item !== channel && item.name.toLowerCase() === normalizedName.toLowerCase()))) {
+      return false;
+    }
+
+    channel.name = normalizedName;
+    return true;
+  }
+
   addCategory(server: Server, name: string, actorId: string): boolean {
     if (!this.canManageServer(server, actorId)) {
       return false;

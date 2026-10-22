@@ -1,5 +1,6 @@
 <ion-content [fullscreen]="true" class="login-screen">
   <main class="login-content">
+    <button class="back-button" type="button" aria-label="Back to splash screen" (click)="goBack()">&larr;</button>
     <div class="login-logo">Login</div>
 
     @if (savedAccounts.length) {

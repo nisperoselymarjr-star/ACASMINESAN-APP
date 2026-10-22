@@ -93,10 +93,9 @@
                     @if (channelSettingsOpen === channel.name) {
                       <div class="channel-settings-menu" role="menu" [attr.aria-label]="channel.name + ' settings'">
                         <button
-                          class="channel-delete-action"
                           type="button"
                           role="menuitem"
-                          (click)="requestDeleteChannel(channel.name)">Delete channel</button>
+                          (click)="requestEditChannel(channel.name)">Edit channel</button>
                       </div>
                     }
                   </div>
@@ -557,6 +556,30 @@
           </section>
         </div>
       }
+      @if (channelBeingEdited; as edit) {
+        <div class="admin-backdrop" (click)="channelBeingEdited = null">
+          <section class="admin-dialog" role="dialog" aria-modal="true" aria-labelledby="edit-channel-title" (click)="$event.stopPropagation()">
+            <button class="admin-close" type="button" aria-label="Cancel channel edit" (click)="channelBeingEdited = null">×</button>
+            <h2 id="edit-channel-title">Edit channel</h2>
+            <form (ngSubmit)="saveChannelEdit()">
+              <label class="admin-field">
+                <span>Channel name</span>
+                <input
+                  type="text"
+                  name="editedChannelName"
+                  [(ngModel)]="edit.name"
+                  (ngModelChange)="editChannelError = ''"
+                  autocomplete="off"
+                  required />
+              </label>
+              @if (editChannelError) {
+                <p class="admin-error" role="alert">{{ editChannelError }}</p>
+              }
+              <button class="admin-action" type="submit" [disabled]="!edit.name.trim()">Save changes</button>
+            </form>
+          </section>
+        </div>
+      }
       @if (activeDueEvent; as dueEvent) {
         <div class="admin-backdrop event-notification-backdrop">
           <section class="admin-dialog event-notification" role="dialog" aria-modal="true" aria-labelledby="due-event-title">
@@ -574,12 +597,8 @@
         <div class="admin-backdrop" (click)="deleteConfirmation = null">
           <section class="admin-dialog delete-confirm-dialog" role="alertdialog" aria-modal="true" aria-labelledby="delete-confirm-title" (click)="$event.stopPropagation()">
             <button class="admin-close" type="button" aria-label="Cancel deletion" (click)="deleteConfirmation = null">×</button>
-            <h2 id="delete-confirm-title">Delete {{ confirmation.type === 'server' ? 'server' : 'channel' }}?</h2>
-            @if (confirmation.type === 'server') {
-              <p>This will permanently remove <strong>{{ confirmation.name }}</strong> and all of its channels.</p>
-            } @else {
-              <p>This will permanently remove only the channel <strong>{{ confirmation.name }}</strong>. The server will remain.</p>
-            }
+            <h2 id="delete-confirm-title">Delete server?</h2>
+            <p>This will permanently remove <strong>{{ confirmation.name }}</strong> and all of its channels.</p>
             <div class="delete-confirm-actions">
               <button class="delete-cancel-action" type="button" (click)="deleteConfirmation = null">Cancel</button>
               <button class="delete-confirm-action" type="button" (click)="confirmDelete()">Delete</button>

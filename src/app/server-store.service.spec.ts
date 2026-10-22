@@ -92,4 +92,20 @@ describe('ServerStoreService', () => {
     expect(lobbyCategory.channels).toEqual([]);
     expect(server.categories).toContain(lobbyCategory);
   });
+
+  it('allows admins and owners to rename channels while rejecting duplicates and members', () => {
+    const server = service.activeServer;
+    if (!server) {
+      throw new Error('Expected a server to be created.');
+    }
+    server.members.push({ id: 'admin-1', name: 'Admin', authority: 'admin' });
+    server.members.push({ id: 'member-1', name: 'Member', authority: 'member' });
+
+    expect(service.renameChannel(server, 'Main Lobby', 'Voice Lounge', 'member-1')).toBe(false);
+    expect(service.renameChannel(server, 'Main Lobby', 'general', 'admin-1')).toBe(false);
+    expect(service.renameChannel(server, 'Missing Lobby', 'Voice Lounge', 'admin-1')).toBe(false);
+    expect(service.renameChannel(server, 'Main Lobby', '  Voice Lounge  ', 'admin-1')).toBe(true);
+    expect(server.categories.flatMap((category) => category.channels).map((channel) => channel.name))
+      .toContain('Voice Lounge');
+  });
 });

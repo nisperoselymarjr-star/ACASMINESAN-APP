@@ -38,7 +38,9 @@ export class HomePage implements OnDestroy {
   inviteStatus = '';
   serverMenuOpen = false;
   channelSettingsOpen: string | null = null;
-  deleteConfirmation: { type: 'server' | 'channel'; name: string } | null = null;
+  deleteConfirmation: { type: 'server'; name: string } | null = null;
+  channelBeingEdited: { currentName: string; name: string } | null = null;
+  editChannelError = '';
   categoryDialogOpen = false;
   eventDialogOpen = false;
   newCategoryName = '';
@@ -161,12 +163,40 @@ export class HomePage implements OnDestroy {
     this.deleteConfirmation = { type: 'server', name: this.activeServer.name };
   }
 
-  requestDeleteChannel(channel: string): void {
-    if (!this.canManageServer || !this.activeServer) {
+  requestEditChannel(channel: string): void {
+    if (!this.canManageServer) {
       return;
     }
     this.channelSettingsOpen = null;
-    this.deleteConfirmation = { type: 'channel', name: channel };
+    this.editChannelError = '';
+    this.channelBeingEdited = { currentName: channel, name: channel };
+  }
+
+  saveChannelEdit(): void {
+    const edit = this.channelBeingEdited;
+    const server = this.activeServer;
+    if (!edit || !server || !this.canManageServer) {
+      return;
+    }
+
+    const newName = edit.name.trim();
+    if (!this.serverStore.renameChannel(server, edit.currentName, newName, CURRENT_MEMBER_ID)) {
+      this.editChannelError = 'Unable to rename the channel. The name may already be in use.';
+      return;
+    }
+
+    const previousKey = JSON.stringify([server.name, edit.currentName]);
+    const updatedKey = JSON.stringify([server.name, newName]);
+    const messages = this.channelMessages.get(previousKey);
+    if (messages && previousKey !== updatedKey) {
+      this.channelMessages.set(updatedKey, messages);
+      this.channelMessages.delete(previousKey);
+    }
+    if (this.activeChannel === edit.currentName) {
+      this.activeChannel = newName;
+    }
+    this.channelBeingEdited = null;
+    this.editChannelError = '';
   }
 
   toggleChannelSettings(channel: string, event: Event): void {
@@ -184,35 +214,18 @@ export class HomePage implements OnDestroy {
       return;
     }
 
-    if (confirmation.type === 'server') {
-      if (!this.serverStore.deleteServer(server, CURRENT_MEMBER_ID)) {
-        this.deleteConfirmation = null;
-        return;
-      }
-      this.stopLocalMedia();
-      this.joinedServers = this.serverStore.servers;
-      this.activeServer = this.serverStore.activeServer;
-      this.activeChannel = '';
-      this.mobileChannelOpen = false;
-      this.voiceJoined = false;
-      this.voiceChatOpen = false;
-      this.deafened = false;
+    if (!this.serverStore.deleteServer(server, CURRENT_MEMBER_ID)) {
       this.deleteConfirmation = null;
       return;
     }
-
-    if (!this.serverStore.deleteChannel(server, confirmation.name, CURRENT_MEMBER_ID)) {
-      this.deleteConfirmation = null;
-      return;
-    }
-    if (this.activeChannel === confirmation.name) {
-      this.stopLocalMedia();
-      this.activeChannel = '';
-      this.voiceJoined = false;
-      this.voiceChatOpen = false;
-      this.deafened = false;
-      this.mobileChannelOpen = false;
-    }
+    this.stopLocalMedia();
+    this.joinedServers = this.serverStore.servers;
+    this.activeServer = this.serverStore.activeServer;
+    this.activeChannel = '';
+    this.mobileChannelOpen = false;
+    this.voiceJoined = false;
+    this.voiceChatOpen = false;
+    this.deafened = false;
     this.deleteConfirmation = null;
   }
 
